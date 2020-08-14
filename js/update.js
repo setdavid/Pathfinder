@@ -15,6 +15,7 @@
             gridArrayTile.classList.toggle("reconstruct");
         }
 
+        //for future use
         // if (gridArrayTile.classList.contains("start")) {
         //     gridArrayTile.classList.toggle("start");
         // }
@@ -22,14 +23,10 @@
         // if (gridArrayTile.classList.contains("target")) {
         //     gridArrayTile.classList.toggle("target");
         // }
+    }
 
-        if (gridArrayTile.classList.contains("tile")) {
-            gridArrayTile.classList.toggle("tile");
-        }
-
-        if (gridArrayTile.classList.contains("block")) {
-            gridArrayTile.classList.toggle("block");
-        }
+    updateJS.disableAllStates = function (gridArrayTile) {
+        disableAllStates(gridArrayTile);
     }
 
     function nodeToTile(gridArrayNode) {
@@ -72,7 +69,7 @@
             gridArrayTile.classList.toggle("in-open-set");
         }
 
-        fScoreDrawUpdate(gridArrayNode);
+        // fScoreDrawUpdate(gridArrayNode);
     }
 
     updateJS.openSetDrawUpdate = function (gridArrayNode) {
@@ -88,7 +85,7 @@
             gridArrayTile.classList.toggle("in-closed-set");
         }
 
-        fScoreDrawUpdate(gridArrayNode);
+        // fScoreDrawUpdate(gridArrayNode);
     }
 
     updateJS.closedSetDrawUpdate = function (gridArrayNode) {
@@ -137,10 +134,28 @@
         targetDrawUpdate(gridArrayNode);
     }
 
+    function tileDrawUpdate(gridArrayNode) {
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        if (gridArrayTile.classList.contains("block")) {
+            gridArrayTile.classList.toggle("block");
+        }
+
+        if (!gridArrayTile.classList.contains("tile")) {
+            gridArrayTile.classList.toggle("tile");
+        }
+    }
+
+    updateJS.tileDrawUpdate = function (gridArrayNode) {
+        tileDrawUpdate(gridArrayNode);
+    }
+
     function blockDrawUpdate(gridArrayNode) {
         let gridArrayTile = nodeToTile(gridArrayNode);
 
-        disableAllStates(gridArrayTile);
+        if (gridArrayTile.classList.contains("tile")) {
+            gridArrayTile.classList.toggle("tile");
+        }
 
         if (!gridArrayTile.classList.contains("block")) {
             gridArrayTile.classList.toggle("block");
@@ -163,6 +178,18 @@
 
     updateJS.toggleTravelerDrawUpdate = function (gridArrayNode) {
         toggleTravelerDrawUpdate(gridArrayNode);
+    }
+
+    function clearPaths(gridArray, rowDimension, colDimension) {
+        for (let row = 0; row < rowDimension; row++) {
+            for (let col = 0; col < colDimension; col++) {
+                gridArray[row][col].clearPaths();
+            }
+        }
+    }
+
+    updateJS.clearPaths = function (gridArray, rowDimension, colDimension) {
+        clearPaths(gridArray, rowDimension, colDimension);
     }
 
 })(window);

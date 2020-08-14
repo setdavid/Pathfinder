@@ -6,11 +6,14 @@
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
         let colDimension = global.pathfindingJS.colDimension;
-        let timeout = 500;
-        let openSet = new Array();
-        let closedSet = new Array();
+        let timeout = 10;
+        let openSet;
+        let closedSet;
 
         function aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners) {
+            openSet = new Array();
+            closedSet = new Array();
+
             openSet.push(startNode);
             startNode.h = heuristicFunc(startNode, targetNode);
             startNode.fScore = startNode.h;
@@ -106,7 +109,7 @@
                                 neighborNode.gScore = potentialgScore;
                                 neighborNode.h = heuristicFunc(neighborNode, targetNode);
                                 neighborNode.fScore = neighborNode.gScore + neighborNode.h;
-                                global.updateJS.fScoreDrawUpdate(neighborNode);
+                                // global.updateJS.fScoreDrawUpdate(neighborNode);
                             }
 
                             if (!neighborNode.inOpenSet) {

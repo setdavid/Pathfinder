@@ -3,43 +3,84 @@
     global.interactionsJS = interactionsJS;
 
     window.addEventListener("DOMContentLoaded", function () {
-        document.querySelector(".navslider-toggler").addEventListener("click", function () {
-            document.querySelector(".navslider").classList.toggle("navslider-closed");
+        let gridArray = global.pathfindingJS.gridArray;
+        let rowDimension = global.pathfindingJS.rowDimension;
+        let colDimension = global.pathfindingJS.colDimension;
 
-            if (!document.querySelector(".navslider").classList.contains("navslider-closed")) {
-                if (!document.querySelector("body").classList.toggle("body-no-scroll")) {
-                    document.querySelector("body").classList.toggle("body-no-scroll");
-                }
-            } else {
-                if (document.querySelector("body").classList.toggle("body-no-scroll")) {
-                    document.querySelector("body").classList.toggle("body-no-scroll");
-                }
-            }
+        document.querySelector("#clear-paths-btn").addEventListener("click", function () {
+            global.updateJS.clearPaths(gridArray, rowDimension, colDimension);
         });
 
-        document.querySelector("form").addEventListener("submit", function (e) {
+        document.querySelector("#general-form").addEventListener("submit", function (e) {
             e.preventDefault();
 
-            let data = new FormData(document.querySelector("#algorithm-form"));
+            let data = new FormData(document.querySelector("#general-form"));
 
-            for (const entry of data) {
-                console.log(entry);
+            let userSettings = {
+                algorithm: null,
+                heuristicFunc: null,
+                movementType: null,
+                cutCorners: null
+            }
+
+            let pfSettings = {
+                startNode: null,
+                targetNode: null,
+                userSettings: userSettings
             };
+
+            let dataArray = new Array();
+            let dataArrayIndex = 0;
+
+            for (entry of data) {
+                dataArray[dataArrayIndex] = entry[1];
+                dataArrayIndex++;
+            };
+
+            dataArrayIndex = 0;
+            for (property in userSettings) {
+                userSettings[property] = dataArray[dataArrayIndex];
+                dataArrayIndex++;
+            }
+
+            pfSettings.userSettings.cutCorners = (pfSettings.userSettings.cutCorners == "true");
+
+            if (pfSettings.userSettings.heuristicFunc == "manhattan") {
+                pfSettings.userSettings.heuristicFunc = global.pathfindingJS.manhattanHFunc;
+            }
+
+            else if (pfSettings.userSettings.heuristicFunc == "euclidian") {
+                pfSettings.userSettings.heuristicFunc = global.pathfindingJS.euclidianHFunc;
+            }
+
+            if (pfSettings.userSettings.algorithm == "aStar") {
+                global.astarAlgorithmJS.aStarPathfinding(gridArray[0][0],
+                    gridArray[rowDimension - 1][colDimension - 1],
+                    pfSettings.userSettings.heuristicFunc,
+                    pfSettings.userSettings.movementType,
+                    pfSettings.userSettings.cutCorners);
+            }
         });
     });
 
     function installEventListeners(gridArrayNode) {
-        if (!(gridArrayNode.type == "start" || gridArrayNode.type == "target")) {
+        if (gridArrayNode.type == "start") {
+
+        }
+
+        else if (gridArrayNode.type == "target") {
+
+        }
+
+        else if (gridArrayNode.type == "tile" || gridArrayNode.type == "block") {
             let gridArrayTile = global.updateJS.nodeToTile(gridArrayNode);
 
             gridArrayTile.addEventListener("click", function () {
                 if (gridArrayNode.type == "tile") {
-                    gridArrayNode.type = "block";
+                    gridArrayNode.setType("block");
                 } else {
-                    gridArrayNode.type = "tile"
+                    gridArrayNode.setType("tile");
                 }
-
-                gridArrayTile.classList.toggle("block");
             });
         }
     }
