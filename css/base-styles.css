@@ -44,9 +44,16 @@ button {
     z-index: 1000;
 }
 
-.navbar div {
+.navbar>div>span {
     color: white;
+}
+
+.navbar>div>span:nth-child(1) {
     font-size: 35px;
+}
+
+.navbar>div>span:nth-child(2) {
+    font-size: 25px;
 }
 
 /********** Grid **********/
@@ -91,8 +98,12 @@ button {
     padding: 30px 30px 30px 30px;
 }
 
-.options form > div, .options > div {
+.options form>div {
     margin-bottom: 30px;
+}
+
+.options>div {
+    margin-bottom: 10px;
 }
 
 .options button {

@@ -11,6 +11,15 @@
             global.updateJS.clearPaths(gridArray, rowDimension, colDimension);
         });
 
+        document.querySelector("#clear-blocks-btn").addEventListener("click", function () {
+            global.updateJS.clearBlocks(gridArray, rowDimension, colDimension);
+        });
+
+        document.querySelector("#clear-all-btn").addEventListener("click", function () {
+            global.updateJS.clearPaths(gridArray, rowDimension, colDimension);
+            global.updateJS.clearBlocks(gridArray, rowDimension, colDimension);
+        });
+
         document.querySelector("#general-form").addEventListener("submit", function (e) {
             e.preventDefault();
 

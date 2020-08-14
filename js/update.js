@@ -192,4 +192,16 @@
         clearPaths(gridArray, rowDimension, colDimension);
     }
 
+    function clearBlocks(gridArray, rowDimension, colDimension) {
+        for (let row = 0; row < rowDimension; row++) {
+            for (let col = 0; col < colDimension; col++) {
+                gridArray[row][col].setType("tile");
+            }
+        }
+    }
+
+    updateJS.clearBlocks = function (gridArray, rowDimension, colDimension) {
+        clearBlocks(gridArray, rowDimension, colDimension);
+    }
+
 })(window);
