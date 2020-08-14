@@ -1,0 +1,127 @@
+/********** General **********/
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    left: 0px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    transition-property: left;
+    transition-duration: 0.5s;
+    color: black;
+    font-family: 'Roboto', sans-serif;
+}
+
+#main-content {
+    display: flex;
+    overflow: hidden;
+}
+
+/********** Navigation Bar **********/
+
+#navbar {
+    display: flex;
+    align-items: center;
+    min-width: 100vw;
+    width: 100vw;
+    height: 100px;
+    min-height: 100px;
+    max-height: 20vh;
+    margin-bottom: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: green;
+}
+
+#navbar div {
+    color: white;
+    font-size: 50px;
+}
+
+/********** Grid **********/
+
+#grid {
+    display: grid;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75vw;
+    grid-template-columns: repeat(5, 15vw);
+    grid-template-rows: repeat(5, 15vw);
+    border: 1px solid black;
+    font-size: 50px;
+}
+
+#grid>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    height: 15vw;
+    transition-property: background-color;
+    transition-duration: 0.5s;
+}
+
+#grid>div>div {
+    text-align: center;
+    font-size: 16px;
+}
+
+.block {}
+
+/********** States **********/
+
+.in-open-set {
+    background-color: #00A3FF;
+}
+
+.in-closed-set {
+    background-color: #00FF11;
+}
+
+.reconstruct {
+    background-color: purple;
+}
+
+.traveler {
+    background-color: yellow !important;
+}
+
+.start {
+    background-color: #FF9C00 !important;
+}
+
+.target {
+    background-color: #FF0000 !important;
+}
+
+.tile {}
+
+.block {
+    background-color: black;
+}
+
+/********** Media Queries **********/
+
+/********** Extra Large devices only **********/
+
+@media (min-width: 1200px) {}
+
+/********** Large devices only **********/
+
+@media (min-width: 992px) and (max-width: 1199px) {}
+
+/********** Medium devices only **********/
+
+@media (min-width: 768px) and (max-width: 991px) {}
+
+/********** Small devices only **********/
+
+@media (min-width: 576px) and (max-width: 767px) {}
+
+/********** Extra Small devices only **********/
+
+@media (max-width: 575px) {}
