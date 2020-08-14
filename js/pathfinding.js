@@ -18,7 +18,7 @@
             for (let col = 0; col < colDimension; col++) {
                 let selectedType = null;
                 let randomNum = Math.random();
-                if (randomNum < 0.3) {
+                if (randomNum < 0) {
                     selectedType = "block";
                 } else {
                     selectedType = "tile";
@@ -102,7 +102,7 @@
             // updateJS.fScoreDrawUpdate(gridArray[0][1]);
             // updateJS.closedSetDrawUpdate(gridArray[0][0]);
 
-            global.astarAlgorithmJS.aStarPathfinding(gridArray[0][0], gridArray[rowDimension - 1][colDimension - 1], euclidianHFunc, "nondiagonal");
+            global.astarAlgorithmJS.aStarPathfinding(gridArray[0][0], gridArray[rowDimension - 1][colDimension - 1], manhattanHFunc, "diagonal", false);
         });
 
         pathfindingJS.gridArray = gridArray;

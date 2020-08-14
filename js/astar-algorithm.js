@@ -6,11 +6,11 @@
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
         let colDimension = global.pathfindingJS.colDimension;
-        let timeout = 10;
+        let timeout = 500;
         let openSet = new Array();
         let closedSet = new Array();
 
-        function aStarPathfinding(startNode, targetNode, heuristicFunc, movementType) {
+        function aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners) {
             openSet.push(startNode);
             startNode.h = heuristicFunc(startNode, targetNode);
             startNode.fScore = startNode.h;
@@ -37,7 +37,7 @@
                     return reconstructPath(startNode, currentNode);
                 }
 
-                analyzeNeighbors(currentNode, targetNode, heuristicFunc, movementType);
+                analyzeNeighbors(currentNode, targetNode, heuristicFunc, movementType, cutCorners);
 
                 if (openSet.length != 0) {
                     window.setTimeout(function () {
@@ -89,14 +89,15 @@
             return lowestfScoreNode;
         }
 
-        function analyzeNeighbors(currentNode, targetNode, heuristicFunc, movementType) {
+        function analyzeNeighbors(currentNode, targetNode, heuristicFunc, movementType, cutCorners) {
             for (let row = currentNode.row - 1; row <= currentNode.row + 1; row++) {
                 for (let col = currentNode.col - 1; col <= currentNode.col + 1; col++) {
-                    if (!(row == currentNode.row && col == currentNode.col) && moveRestrictions(movementType, row, col, currentNode)) {
-                        if ((row >= 0 && row < rowDimension) &&
-                            (col >= 0 && col < colDimension) &&
-                            (!gridArray[row][col].inClosedSet) &&
-                            (gridArray[row][col].type != "block")) {
+                    if ((row >= 0 && row < rowDimension) &&
+                        (col >= 0 && col < colDimension) &&
+                        !(row == currentNode.row && col == currentNode.col) &&
+                        (!gridArray[row][col].inClosedSet) &&
+                        (gridArray[row][col].type != "block")) {
+                        if (moveRestrictions(movementType, cutCorners, row, col, currentNode, gridArray)) {
                             let neighborNode = gridArray[row][col];
                             let potentialgScore = currentNode.gScore + weightFunc(currentNode, neighborNode);
 
@@ -105,7 +106,7 @@
                                 neighborNode.gScore = potentialgScore;
                                 neighborNode.h = heuristicFunc(neighborNode, targetNode);
                                 neighborNode.fScore = neighborNode.gScore + neighborNode.h;
-                                // global.updateJS.fScoreDrawUpdate(neighborNode);
+                                global.updateJS.fScoreDrawUpdate(neighborNode);
                             }
 
                             if (!neighborNode.inOpenSet) {
@@ -122,20 +123,108 @@
             return global.pathfindingJS.euclidianHFunc(currentNode, neighborNode);
         }
 
-        function moveRestrictions(movementType, row, col, currentNode) {
+        function moveRestrictions(movementType, cutCorners, row, col, currentNode, gridArray) {
+            let mtAllowed = false;
+            let ccAllowed = false;
+
             if (movementType == "diagonal") {
-                return true;
+                mtAllowed = true;
+
+                if (cutCorners) {
+                    ccAllowed = true;
+                } else {
+                    let cornerLocation = locatedOnCorner();
+                    let ccAllowedY = false;
+                    let ccAllowedX = false;
+
+                    if (cornerLocation[2] < 2) {
+                        ccAllowed = true;
+                    } else {
+                        if (cornerLocation[0] == "top") {
+                            if (gridArray[row + 1][col].type != "block") {
+                                ccAllowedY = true;
+                            } else {
+                                ccAllowedY = false;
+                            }
+                        }
+
+                        else if (cornerLocation[0] == "bottom") {
+                            if (gridArray[row - 1][col].type != "block") {
+                                ccAllowedY = true;
+                            } else {
+                                ccAllowedY = false;
+                            }
+                        }
+
+                        if (cornerLocation[1] == "left") {
+                            if (gridArray[row][col + 1].type != "block") {
+                                ccAllowedX = true;
+                            } else {
+                                ccAllowedX = false;
+                            }
+                        }
+
+                        else if (cornerLocation[1] == "right") {
+                            if (gridArray[row][col - 1].type != "block") {
+                                ccAllowedX = true;
+                            } else {
+                                ccAllowedX = false;
+                            }
+                        }
+
+                        if (ccAllowedX && ccAllowedY) {
+                            ccAllowed = true;
+                        } else {
+                            ccAllowed = false;
+                        }
+                    }
+                }
             }
 
             else if (movementType == "nondiagonal") {
-                if (!((row == currentNode.row - 1) && (col == currentNode.col - 1)) &&
-                    !((row == currentNode.row - 1) && (col == currentNode.col + 1)) &&
-                    !((row == currentNode.row + 1) && (col == currentNode.col - 1)) &&
-                    !((row == currentNode.row + 1) && (col == currentNode.col + 1))) {
-                    return true;
+                ccAllowed = true;
+
+                if (locatedOnCorner()[2] < 2) {
+                    mtAllowed = true;
                 } else {
-                    return false;
+                    mtAllowed = false;
                 }
+            }
+
+            if (mtAllowed && ccAllowed) {
+                return true;
+            } else {
+                return false;
+            }
+
+            function locatedOnCorner() {
+                let locationInfo = new Array();
+                let numItems = 0;
+
+                if (row == currentNode.row - 1) {
+                    locationInfo[0] = "top";
+                    numItems++;
+                }
+
+                else if (row == currentNode.row + 1) {
+                    locationInfo[0] = "bottom";
+                    numItems++;
+                }
+
+                if (col == currentNode.col - 1) {
+                    locationInfo[1] = "left";
+                    numItems++;
+                }
+
+                else if (col == currentNode.col + 1) {
+                    locationInfo[1] = "right";
+                    numItems++;
+                }
+
+                locationInfo[2] = numItems;
+
+                console.log(locationInfo);
+                return locationInfo;
             }
         }
 
@@ -181,8 +270,8 @@
             console.log("failed");
         }
 
-        astarAlgorithmJS.aStarPathfinding = function (startNode, targetNode, heuristicFunc, movementType) {
-            aStarPathfinding(startNode, targetNode, heuristicFunc, movementType);
+        astarAlgorithmJS.aStarPathfinding = function (startNode, targetNode, heuristicFunc, movementType, cutCorners) {
+            aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners);
         };
     });
 })(window);

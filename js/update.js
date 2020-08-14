@@ -72,7 +72,7 @@
             gridArrayTile.classList.toggle("in-open-set");
         }
 
-        // fScoreDrawUpdate(gridArrayNode);
+        fScoreDrawUpdate(gridArrayNode);
     }
 
     updateJS.openSetDrawUpdate = function (gridArrayNode) {
@@ -88,7 +88,7 @@
             gridArrayTile.classList.toggle("in-closed-set");
         }
 
-        // fScoreDrawUpdate(gridArrayNode);
+        fScoreDrawUpdate(gridArrayNode);
     }
 
     updateJS.closedSetDrawUpdate = function (gridArrayNode) {

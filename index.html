@@ -5,14 +5,36 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Pathfinding by setdavid</title>
-    <!-- <script src="https://kit.fontawesome.com/4e94148f52.js" crossorigin="anonymous"></script> -->
     <link rel="stylesheet" title="base-styles" href="css/base-styles.css">
+    <script src="https://kit.fontawesome.com/4e94148f52.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div id="navbar">
+    <div class="navbar">
         <div>
             Pathfinding
+        </div>
+        <div>
+            <div class="navslider-toggler fas fa-bars"></div>
+        </div>
+    </div>
+    <div class="navslider navslider-closed">
+        <div>
+            <form id="algorithm-form">
+                <div>
+                    Algorithm
+                </div>
+                <input type="radio" id="algorithm-choice-1" name="algorithm" value="A*" checked>
+                <label for="algorithm-choice-1">A*</label>
+                <div>
+                    Movement Type
+                </div>
+                <input type="radio" id="movement-type-choice-1" name="movement-type" value="diagonal" checked>
+                <label for="movement-type-choice-1">Diagonal</label>
+                <input type="radio" id="movement-type-choice-2" name="movement-type" value="nondiagonal">
+                <label for="movement-type-choice-2">Nondiagonal</label>
+                <button id="submit" type="submit">submit</button>
+            </form>
         </div>
     </div>
     <div id="main-content">
