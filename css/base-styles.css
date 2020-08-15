@@ -138,8 +138,16 @@ button {
     background-color: #FF9C00 !important;
 }
 
+.selected {
+    border-color: greenyellow !important;
+}
+
 .target {
     background-color: #FF0000 !important;
+}
+
+.move-target {
+    background-color: rgba(255, 0, 0, 0.3);
 }
 
 .tile {}

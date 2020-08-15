@@ -125,7 +125,9 @@
     function startDrawUpdate(gridArrayNode) {
         let gridArrayTile = nodeToTile(gridArrayNode);
 
-        disableAllStates(gridArrayTile);
+        if (gridArrayTile.classList.contains("tile")) {
+            gridArrayTile.classList.toggle("tile");
+        }
 
         if (!gridArrayTile.classList.contains("start")) {
             gridArrayTile.classList.toggle("start");
@@ -136,10 +138,48 @@
         startDrawUpdate(gridArrayNode);
     }
 
+    function selectedEnabled(gridArrayNode) {
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        if (!gridArrayTile.classList.contains("selected")) {
+            gridArrayTile.classList.toggle("selected");
+        }
+    }
+
+    updateJS.selectedEnabled = function (gridArrayNode) {
+        selectedEnabled(gridArrayNode);
+    }
+
+    function selectedDisabled(gridArrayNode) {
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        if (gridArrayTile.classList.contains("selected")) {
+            gridArrayTile.classList.toggle("selected");
+        }
+    }
+
+    updateJS.selectedDisabled = function (gridArrayNode) {
+        selectedDisabled(gridArrayNode);
+    }
+
+    function removeStart(gridArrayNode) {
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        if (gridArrayTile.classList.contains("start")) {
+            gridArrayTile.classList.toggle("start");
+        }
+    }
+
+    updateJS.removeStart = function (gridArrayNode) {
+        removeStart(gridArrayNode);
+    }
+
     function targetDrawUpdate(gridArrayNode) {
         let gridArrayTile = nodeToTile(gridArrayNode);
 
-        disableAllStates(gridArrayTile);
+        if (gridArrayTile.classList.contains("tile")) {
+            gridArrayTile.classList.toggle("tile");
+        }
 
         if (!gridArrayTile.classList.contains("target")) {
             gridArrayTile.classList.toggle("target");
@@ -148,6 +188,18 @@
 
     updateJS.targetDrawUpdate = function (gridArrayNode) {
         targetDrawUpdate(gridArrayNode);
+    }
+
+    function removeTarget(gridArrayNode) {
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        if (gridArrayTile.classList.contains("target")) {
+            gridArrayTile.classList.toggle("target");
+        }
+    }
+
+    updateJS.removeTarget = function (gridArrayNode) {
+        removeTarget(gridArrayNode);
     }
 
     function tileDrawUpdate(gridArrayNode) {

@@ -5,10 +5,19 @@
     let blockPaint = false;
     let tilePaint = false;
 
+    let moveStart = false;
+    let currStart = null;
+
+    let moveTarget = false;
+    let currTarget = null;
+
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
         let colDimension = global.pathfindingJS.colDimension;
+
+        currStart = gridArray[0][0];
+        currTarget = gridArray[rowDimension - 1][colDimension - 1];
 
         document.querySelector("#clear-paths-btn").addEventListener("click", function () {
             global.updateJS.clearPaths(gridArray, rowDimension, colDimension);
@@ -68,8 +77,8 @@
             if (pfSettings.userSettings.algorithm == "aStar") {
                 global.updateJS.clearPaths(gridArray, rowDimension, colDimension);
 
-                global.astarAlgorithmJS.aStarPathfinding(gridArray[0][0],
-                    gridArray[rowDimension - 1][colDimension - 1],
+                global.astarAlgorithmJS.aStarPathfinding(currStart,
+                    currTarget,
                     pfSettings.userSettings.heuristicFunc,
                     pfSettings.userSettings.movementType,
                     pfSettings.userSettings.cutCorners);
@@ -94,20 +103,14 @@
         gridArrayTile.addEventListener("mousedown", function (e) {
             e.preventDefault();
 
-            if (gridArrayNode.type == "tile") {
+            if ((gridArrayNode.type == "tile") && !moveStart && !moveTarget) {
                 blockPaint = true;
-
-                if (gridArrayNode.type == "tile") {
-                    gridArrayNode.setType("block");
-                }
+                gridArrayNode.setType("block");
             }
 
-            else if (gridArrayNode.type == "block") {
+            else if ((gridArrayNode.type == "block") && !moveStart && !moveTarget) {
                 tilePaint = true;
-
-                if (gridArrayNode.type == "block") {
-                    gridArrayNode.setType("tile");
-                }
+                gridArrayNode.setType("tile");
             }
         });
 
@@ -128,11 +131,57 @@
         });
 
         gridArrayTile.addEventListener("click", function () {
-            if (gridArrayNode.type == "start") {
+            if (moveStart && (gridArrayNode.type != "tile") && (gridArrayNode.type != "start")) {
+                moveStart = false;
+                global.updateJS.selectedDisabled(currStart);
+            }
 
+            if (moveTarget && (gridArrayNode.type != "tile") && (gridArrayNode.type != "target")) {
+                moveTarget = false;
+                global.updateJS.selectedDisabled(currTarget);
+            }
+
+            if (gridArrayNode.type == "start") {
+                if (moveStart) {
+                    moveStart = false;
+                    global.updateJS.selectedDisabled(currStart);
+                } else {
+                    moveStart = true;
+                    global.updateJS.selectedEnabled(currStart);
+                }
             }
 
             else if (gridArrayNode.type == "target") {
+                if (moveTarget) {
+                    moveTarget = false;
+                    global.updateJS.selectedDisabled(currTarget);
+                } else {
+                    moveTarget = true;
+                    global.updateJS.selectedEnabled(currTarget);
+                }
+            }
+
+            else if (gridArrayNode.type == "tile") {
+                if (moveStart) {
+                    moveStart = false;
+                    global.updateJS.selectedDisabled(currStart);
+                    currStart.setType("tile");
+                    global.updateJS.removeStart(currStart);
+                    gridArrayNode.setType("start");
+                    currStart = gridArrayNode;
+                }
+
+                if (moveTarget) {
+                    moveTarget = false;
+                    global.updateJS.selectedDisabled(currTarget);
+                    currTarget.setType("tile");
+                    global.updateJS.removeTarget(currTarget);
+                    gridArrayNode.setType("target");
+                    currTarget = gridArrayNode;
+                }
+            }
+
+            else if (gridArrayNode.type == "block") {
 
             }
 
