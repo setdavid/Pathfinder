@@ -18,7 +18,7 @@
             for (let col = 0; col < colDimension; col++) {
                 let selectedType = null;
                 let randomNum = Math.random();
-                if (randomNum < 0.3) {
+                if (randomNum < 0) {
                     selectedType = "block";
                 } else {
                     selectedType = "tile";
@@ -71,7 +71,7 @@
                     clearPaths: function () {
                         gridArray[row][col].inOpenSet = false;
                         gridArray[row][col].inClosedSet = false;
-                        
+
                         global.updateJS.disableAllStates(
                             global.updateJS.nodeToTile(gridArray[row][col])
                         );

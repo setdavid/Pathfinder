@@ -2,6 +2,9 @@
     let interactionsJS = {};
     global.interactionsJS = interactionsJS;
 
+    let blockPaint = false;
+    let tilePaint = false;
+
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
@@ -72,28 +75,75 @@
                     pfSettings.userSettings.cutCorners);
             }
         });
+
+        document.querySelector("html").addEventListener("mouseup", function (e) {
+            e.preventDefault();
+
+            if (blockPaint) {
+                blockPaint = false;
+            }
+
+            else if (tilePaint) {
+                tilePaint = false;
+            }
+        });
     });
 
     function installEventListeners(gridArrayNode) {
-        if (gridArrayNode.type == "start") {
+        let gridArrayTile = global.updateJS.nodeToTile(gridArrayNode);
+        gridArrayTile.addEventListener("mousedown", function (e) {
+            e.preventDefault();
 
-        }
+            if (gridArrayNode.type == "tile") {
+                blockPaint = true;
 
-        else if (gridArrayNode.type == "target") {
-
-        }
-
-        else if (gridArrayNode.type == "tile" || gridArrayNode.type == "block") {
-            let gridArrayTile = global.updateJS.nodeToTile(gridArrayNode);
-
-            gridArrayTile.addEventListener("click", function () {
                 if (gridArrayNode.type == "tile") {
                     gridArrayNode.setType("block");
-                } else {
+                }
+            }
+
+            else if (gridArrayNode.type == "block") {
+                tilePaint = true;
+
+                if (gridArrayNode.type == "block") {
                     gridArrayNode.setType("tile");
                 }
-            });
-        }
+            }
+        });
+
+        gridArrayTile.addEventListener("mouseover", function (e) {
+            e.preventDefault();
+
+            if (blockPaint) {
+                if (gridArrayNode.type == "tile") {
+                    gridArrayNode.setType("block");
+                }
+            }
+
+            else if (tilePaint) {
+                if (gridArrayNode.type == "block") {
+                    gridArrayNode.setType("tile");
+                }
+            }
+        });
+
+        gridArrayTile.addEventListener("click", function () {
+            if (gridArrayNode.type == "start") {
+
+            }
+
+            else if (gridArrayNode.type == "target") {
+
+            }
+
+            // else if (gridArrayNode.type == "tile" || gridArrayNode.type == "block") {
+            //     if (gridArrayNode.type == "tile") {
+            //         gridArrayNode.setType("block");
+            //     } else {
+            //         gridArrayNode.setType("tile");
+            //     }
+            // }
+        });
     }
 
     interactionsJS.installEventListeners = function (gridArrayNode) {

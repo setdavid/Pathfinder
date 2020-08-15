@@ -274,6 +274,8 @@
 
         function failure() {
             console.log("failed");
+            global.updateJS.pathLengthUpdate("no path found");
+            global.updateJS.pathBlockLengthUpdate("no path found");
         }
 
         astarAlgorithmJS.aStarPathfinding = function (startNode, targetNode, heuristicFunc, movementType, cutCorners) {
