@@ -6,7 +6,7 @@
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
         let colDimension = global.pathfindingJS.colDimension;
-        let timeout = 10;
+        let timeout = 25;
         let openSet;
         let closedSet;
 
@@ -232,7 +232,7 @@
         }
 
         function reconstructPath(startNode, currentNode) {
-            let totalPath = new Array(currentNode);
+            let totalPath = new Array();
             let targetNode = currentNode;
 
             while (currentNode != startNode) {
@@ -242,6 +242,8 @@
             }
 
             reconstructUpdate();
+
+            global.updateJS.pathBlockLengthUpdate(totalPath.length - 1);
 
             function reconstructUpdate() {
                 if (currentNode.inClosedSet && !currentNode.inOpenSet) {

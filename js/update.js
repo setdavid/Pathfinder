@@ -106,6 +106,14 @@
         reconstructDrawUpdate(gridArrayNode);
     }
 
+    function pathBlockLengthUpdate(length) {
+        document.querySelector("#path-block-length").innerHTML = length;
+    }
+
+    updateJS.pathBlockLengthUpdate = function (length) {
+        pathBlockLengthUpdate(length);
+    }
+
     function startDrawUpdate(gridArrayNode) {
         let gridArrayTile = nodeToTile(gridArrayNode);
 

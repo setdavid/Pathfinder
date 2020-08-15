@@ -63,6 +63,8 @@
             }
 
             if (pfSettings.userSettings.algorithm == "aStar") {
+                global.updateJS.clearPaths(gridArray, rowDimension, colDimension);
+
                 global.astarAlgorithmJS.aStarPathfinding(gridArray[0][0],
                     gridArray[rowDimension - 1][colDimension - 1],
                     pfSettings.userSettings.heuristicFunc,
