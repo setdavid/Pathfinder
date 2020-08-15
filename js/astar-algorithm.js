@@ -226,7 +226,6 @@
 
                 locationInfo[2] = numItems;
 
-                console.log(locationInfo);
                 return locationInfo;
             }
         }

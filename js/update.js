@@ -248,28 +248,24 @@
         toggleTravelerDrawUpdate(gridArrayNode);
     }
 
-    function clearPaths(gridArray, rowDimension, colDimension) {
+    function clear(gridArray, rowDimension, colDimension, clearPaths, clearBlocks) {
         for (let row = 0; row < rowDimension; row++) {
             for (let col = 0; col < colDimension; col++) {
-                gridArray[row][col].clearPaths();
+                if (clearPaths) {
+                    gridArray[row][col].clearPaths();
+                }
+
+                if (clearBlocks) {
+                    if (gridArray[row][col].type == "block") {
+                        gridArray[row][col].setType("tile");
+                    }
+                }
             }
         }
     }
 
-    updateJS.clearPaths = function (gridArray, rowDimension, colDimension) {
-        clearPaths(gridArray, rowDimension, colDimension);
-    }
-
-    function clearBlocks(gridArray, rowDimension, colDimension) {
-        for (let row = 0; row < rowDimension; row++) {
-            for (let col = 0; col < colDimension; col++) {
-                gridArray[row][col].setType("tile");
-            }
-        }
-    }
-
-    updateJS.clearBlocks = function (gridArray, rowDimension, colDimension) {
-        clearBlocks(gridArray, rowDimension, colDimension);
+    updateJS.clear = function (gridArray, rowDimension, colDimension, clearPaths, clearBlocks) {
+        clear(gridArray, rowDimension, colDimension, clearPaths, clearBlocks);
     }
 
 })(window);

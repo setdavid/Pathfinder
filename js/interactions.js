@@ -20,16 +20,15 @@
         currTarget = gridArray[rowDimension - 1][colDimension - 1];
 
         document.querySelector("#clear-paths-btn").addEventListener("click", function () {
-            global.updateJS.clearPaths(gridArray, rowDimension, colDimension);
+            global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
         });
 
         document.querySelector("#clear-blocks-btn").addEventListener("click", function () {
-            global.updateJS.clearBlocks(gridArray, rowDimension, colDimension);
+            global.updateJS.clear(gridArray, rowDimension, colDimension, false, true);
         });
 
         document.querySelector("#clear-all-btn").addEventListener("click", function () {
-            global.updateJS.clearPaths(gridArray, rowDimension, colDimension);
-            global.updateJS.clearBlocks(gridArray, rowDimension, colDimension);
+            global.updateJS.clear(gridArray, rowDimension, colDimension, true, true);
         });
 
         document.querySelector("#general-form").addEventListener("submit", function (e) {
@@ -75,7 +74,7 @@
             }
 
             if (pfSettings.userSettings.algorithm == "aStar") {
-                global.updateJS.clearPaths(gridArray, rowDimension, colDimension);
+                global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
 
                 global.astarAlgorithmJS.aStarPathfinding(currStart,
                     currTarget,
