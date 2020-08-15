@@ -106,6 +106,14 @@
         reconstructDrawUpdate(gridArrayNode);
     }
 
+    function pathLengthUpdate(length) {
+        document.querySelector("#path-length").innerHTML = length;
+    }
+
+    updateJS.pathLengthUpdate = function (length) {
+        pathLengthUpdate(length);
+    }
+
     function pathBlockLengthUpdate(length) {
         document.querySelector("#path-block-length").innerHTML = length;
     }

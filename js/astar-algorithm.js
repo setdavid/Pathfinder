@@ -243,6 +243,7 @@
 
             reconstructUpdate();
 
+            global.updateJS.pathLengthUpdate(targetNode.gScore);
             global.updateJS.pathBlockLengthUpdate(totalPath.length - 1);
 
             function reconstructUpdate() {
