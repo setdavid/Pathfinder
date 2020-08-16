@@ -6,7 +6,7 @@
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
         let colDimension = global.pathfindingJS.colDimension;
-        let timeout = 25;
+        let timeout = 50;
         let openSet;
         let closedSet;
 
@@ -109,6 +109,7 @@
                                 neighborNode.gScore = potentialgScore;
                                 neighborNode.h = heuristicFunc(neighborNode, targetNode);
                                 neighborNode.fScore = neighborNode.gScore + neighborNode.h;
+                                
                                 // global.updateJS.fScoreDrawUpdate(neighborNode);
                             }
 

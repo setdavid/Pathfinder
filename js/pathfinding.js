@@ -7,9 +7,6 @@
         let colDimension = global.gridSetupJS.colDimension;
         let scale = 10;
 
-        let startNode = null;
-        let targetNode = null;
-
         let gridArray = new Array();
 
         for (let row = 0; row < rowDimension; row++) {
@@ -47,8 +44,6 @@
                     },
                     row: row,
                     col: col,
-                    posX: col,
-                    posY: row,
                     indexInOpenSet: 0,
                     inOpenSet: false,
                     setInOpenSet: function (newValue) {
@@ -86,12 +81,10 @@
                 gridArray[row][col].setType(selectedType);
 
                 if (row == 0 && col == 0) {
-                    startNode = gridArray[0][0];
                     gridArray[0][0].setType("start");
                 }
 
                 else if (row == (rowDimension - 1) && col == (colDimension - 1)) {
-                    targetNode = gridArray[rowDimension - 1][colDimension - 1];
                     gridArray[rowDimension - 1][colDimension - 1].setType("target");
                 }
 
@@ -101,8 +94,8 @@
 
         function euclidianHFunc(node, targetNode) {
             return scale * Math.sqrt(
-                Math.pow(Math.abs(node.posX - targetNode.posX), 2) +
-                Math.pow(Math.abs(node.posY - targetNode.posY), 2))
+                Math.pow(Math.abs(node.col - targetNode.col), 2) +
+                Math.pow(Math.abs(node.row - targetNode.row), 2))
         }
 
         pathfindingJS.euclidianHFunc = function (node, targetNode) {
@@ -111,7 +104,7 @@
 
 
         function manhattanHFunc(node, targetNode) {
-            return scale * (Math.abs(node.posX - targetNode.posX) + Math.abs(node.posY - targetNode.posY));
+            return scale * (Math.abs(node.col - targetNode.col) + Math.abs(node.row - targetNode.row));
         }
 
         pathfindingJS.manhattanHFunc = function (node, targetNode) {
