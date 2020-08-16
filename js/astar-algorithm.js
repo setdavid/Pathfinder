@@ -6,13 +6,11 @@
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
         let colDimension = global.pathfindingJS.colDimension;
-        let timeout = 50;
+        let timeout = 250;
         let openSet;
-        let closedSet;
 
         function aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners) {
             openSet = new Array();
-            closedSet = new Array();
 
             openSet.push(startNode);
             startNode.h = heuristicFunc(startNode, targetNode);
@@ -33,47 +31,30 @@
 
                 openSet.splice(currentNode.indexInOpenSet, 1);
                 currentNode.setInOpenSet(false);
-                closedSet.push(currentNode);
                 currentNode.setInClosedSet(true);
 
                 if (currentNode === targetNode) {
                     return reconstructPath(startNode, currentNode);
-                }
-
-                analyzeNeighbors(currentNode, targetNode, heuristicFunc, movementType, cutCorners);
-
-                if (openSet.length != 0) {
-                    window.setTimeout(function () {
-                        whileLoop();
-                    }, timeout);
                 } else {
-                    return failure();
+                    analyzeNeighbors(currentNode, targetNode, heuristicFunc, movementType, cutCorners);
+
+                    if (openSet.length != 0) {
+                        window.setTimeout(function () {
+                            whileLoop();
+                        }, timeout);
+                    } else {
+                        return failure();
+                    }
                 }
             }
-
-            // while (openSet.length != 0) {
-            //     let currentNode = lowestfScoreSearch();
-            //     console.log(currentNode);
-
-            //     if (currentNode === targetNode) {
-            //         return reconstructPath(closedSet, currentNode);
-            //     }
-
-            //     openSet.splice(currentNode.indexInOpenSet, 1);
-            //     currentNode.inOpenSet = false;
-            //     closedSet.push(currentNode);
-            //     currentNode.inClosedSet = true;
-            //     global.updateJS.closedSetDrawUpdate(currentNode);
-
-            //     analyzeNeighbors(currentNode, targetNode);
-            // }
         }
 
         function lowestfScoreSearch() {
             let lowestfScore = Infinity;
             let lowestfScoreNode = null;
             for (let i = 0; i < openSet.length; i++) {
-                if (!openSet[i].inClosedSet) {
+
+                if (!(openSet[i].fScore == Infinity)) {
                     if (openSet[i].fScore < lowestfScore) {
                         lowestfScore = openSet[i].fScore;
                         lowestfScoreNode = openSet[i];
@@ -81,11 +62,13 @@
                     }
 
                     else if (openSet[i].fScore == lowestfScore) {
-                        if (openSet[i].h < lowestfScoreNode.h) {
+                        if (openSet[i].gScore < lowestfScoreNode.gScore) {
                             lowestfScoreNode = openSet[i];
                             lowestfScoreNode.indexInOpenSet = i;
                         }
                     }
+                } else {
+                    return failure();
                 }
             }
 
@@ -109,7 +92,7 @@
                                 neighborNode.gScore = potentialgScore;
                                 neighborNode.h = heuristicFunc(neighborNode, targetNode);
                                 neighborNode.fScore = neighborNode.gScore + neighborNode.h;
-                                
+
                                 // global.updateJS.fScoreDrawUpdate(neighborNode);
                             }
 

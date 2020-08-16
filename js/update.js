@@ -49,7 +49,7 @@
     }
 
     function fScoreDrawUpdate(gridArrayNode) {
-        let gridArrayNodefScore = Math.trunc(gridArrayNode.h);
+        let gridArrayNodefScore = Math.trunc(gridArrayNode.fScore);
 
         let gridArrayTile = nodeToTile(gridArrayNode);
 

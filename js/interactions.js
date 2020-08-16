@@ -180,9 +180,9 @@
                 }
             }
 
-            else if (gridArrayNode.type == "block") {
+            // else if (gridArrayNode.type == "block") {
 
-            }
+            // }
 
             // else if (gridArrayNode.type == "tile" || gridArrayNode.type == "block") {
             //     if (gridArrayNode.type == "tile") {
