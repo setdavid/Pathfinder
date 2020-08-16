@@ -23,7 +23,7 @@
         </div>
         <div class="options">
             <div>
-                <button id="clear-paths-btn">CLEAR PATHS</button>
+                <button id="clear-paths-btn">CLEAR PATHS / END SIMULATION</button>
                 <button id="clear-blocks-btn">CLEAR WALL BLOCKS</button>
                 <button id="clear-all-btn">CLEAR ALL</button>
             </div>
@@ -75,6 +75,19 @@
                         <label for="cut-corners-choice-1">Enable</label>
                         <input type="radio" id="cut-corners-choice-2" name="cut-corners" value="false">
                         <label for="cut-corners-choice-2">Disable</label>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        Speed
+                    </div>
+                    <div>
+                        <input type="radio" id="speed-choice-1" name="speed" value="10" checked>
+                        <label for="speed-choice-1">Fast</label>
+                        <input type="radio" id="speed-choice-2" name="speed" value="250">
+                        <label for="speed-choice-2">Moderate</label>
+                        <input type="radio" id="speed-choice-3" name="speed" value="1000">
+                        <label for="speed-choice-3">Slow</label>
                     </div>
                 </div>
             </form>

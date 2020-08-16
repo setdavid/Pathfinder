@@ -2,6 +2,8 @@
     let interactionsJS = {};
     global.interactionsJS = interactionsJS;
 
+    interactionsJS.simulationRunning = false;
+
     let blockPaint = false;
     let tilePaint = false;
 
@@ -24,63 +26,73 @@
         });
 
         document.querySelector("#clear-blocks-btn").addEventListener("click", function () {
-            global.updateJS.clear(gridArray, rowDimension, colDimension, false, true);
+            if (!interactionsJS.simulationRunning) {
+                global.updateJS.clear(gridArray, rowDimension, colDimension, false, true);
+            }
         });
 
         document.querySelector("#clear-all-btn").addEventListener("click", function () {
-            global.updateJS.clear(gridArray, rowDimension, colDimension, true, true);
+            if (!interactionsJS.simulationRunning) {
+                global.updateJS.clear(gridArray, rowDimension, colDimension, true, true);
+            }
         });
 
         document.querySelector("#general-form").addEventListener("submit", function (e) {
             e.preventDefault();
 
-            let data = new FormData(document.querySelector("#general-form"));
+            if (!interactionsJS.simulationRunning) {
 
-            let userSettings = {
-                algorithm: null,
-                heuristicFunc: null,
-                movementType: null,
-                cutCorners: null
-            }
+                let data = new FormData(document.querySelector("#general-form"));
 
-            let pfSettings = {
-                startNode: null,
-                targetNode: null,
-                userSettings: userSettings
-            };
+                let userSettings = {
+                    algorithm: null,
+                    heuristicFunc: null,
+                    movementType: null,
+                    cutCorners: null,
+                    speed: null
+                }
 
-            let dataArray = new Array();
-            let dataArrayIndex = 0;
+                let pfSettings = {
+                    startNode: null,
+                    targetNode: null,
+                    userSettings: userSettings
+                };
 
-            for (entry of data) {
-                dataArray[dataArrayIndex] = entry[1];
-                dataArrayIndex++;
-            };
+                let dataArray = new Array();
+                let dataArrayIndex = 0;
 
-            dataArrayIndex = 0;
-            for (property in userSettings) {
-                userSettings[property] = dataArray[dataArrayIndex];
-                dataArrayIndex++;
-            }
+                for (entry of data) {
+                    dataArray[dataArrayIndex] = entry[1];
+                    dataArrayIndex++;
+                };
 
-            pfSettings.userSettings.cutCorners = (pfSettings.userSettings.cutCorners == "true");
+                dataArrayIndex = 0;
+                for (property in userSettings) {
+                    userSettings[property] = dataArray[dataArrayIndex];
+                    dataArrayIndex++;
+                }
 
-            if (pfSettings.userSettings.heuristicFunc == "manhattan") {
-                pfSettings.userSettings.heuristicFunc = global.pathfindingJS.manhattanHFunc;
-            }
+                pfSettings.userSettings.cutCorners = (pfSettings.userSettings.cutCorners == "true");
+                pfSettings.userSettings.speed = parseInt(pfSettings.userSettings.speed);
 
-            else if (pfSettings.userSettings.heuristicFunc == "euclidian") {
-                pfSettings.userSettings.heuristicFunc = global.pathfindingJS.euclidianHFunc;
-            }
+                if (pfSettings.userSettings.heuristicFunc == "manhattan") {
+                    pfSettings.userSettings.heuristicFunc = global.pathfindingJS.manhattanHFunc;
+                }
 
-            if (pfSettings.userSettings.algorithm == "aStar") {
-                global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
+                else if (pfSettings.userSettings.heuristicFunc == "euclidian") {
+                    pfSettings.userSettings.heuristicFunc = global.pathfindingJS.euclidianHFunc;
+                }
 
-                global.astarAlgorithmJS.aStarPathfinding(currStart,
-                    currTarget,
-                    pfSettings.userSettings.heuristicFunc,
-                    pfSettings.userSettings.movementType,
-                    pfSettings.userSettings.cutCorners);
+                if (pfSettings.userSettings.algorithm == "aStar") {
+                    global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
+
+                    global.astarAlgorithmJS.aStarPathfinding(currStart,
+                        currTarget,
+                        pfSettings.userSettings.heuristicFunc,
+                        pfSettings.userSettings.movementType,
+                        pfSettings.userSettings.cutCorners,
+                        pfSettings.userSettings.speed);
+                }
             }
         });
 

@@ -6,10 +6,11 @@
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
         let colDimension = global.pathfindingJS.colDimension;
-        let timeout = 250;
         let openSet;
 
-        function aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners) {
+        function aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {
+            global.interactionsJS.simulationRunning = true;
+
             openSet = new Array();
 
             openSet.push(startNode);
@@ -26,7 +27,7 @@
                 let currentNode = lowestfScoreSearch();
 
                 if (!currentNode) {
-                    return failure();
+                    return failure("interrupted");
                 }
 
                 openSet.splice(currentNode.indexInOpenSet, 1);
@@ -43,7 +44,7 @@
                             whileLoop();
                         }, timeout);
                     } else {
-                        return failure();
+                        return failure("no path");
                     }
                 }
             }
@@ -68,7 +69,7 @@
                         }
                     }
                 } else {
-                    return failure();
+                    return failure("interrupted");
                 }
             }
 
@@ -252,17 +253,29 @@
                 }
             }
 
+            global.interactionsJS.simulationRunning = false;
+
             return totalPath;
         }
 
-        function failure() {
-            console.log("failed");
-            global.updateJS.pathLengthUpdate("no path found");
-            global.updateJS.pathBlockLengthUpdate("no path found");
+        function failure(reason) {
+            let explanation = "";
+
+            if (reason == "no path") {
+                explanation = "no path found";
+            } else {
+                explanation = "simulation interrupted"
+            }
+
+            console.log(explanation);
+            global.updateJS.pathLengthUpdate(explanation);
+            global.updateJS.pathBlockLengthUpdate(explanation);
+
+            global.interactionsJS.simulationRunning = false;
         }
 
-        astarAlgorithmJS.aStarPathfinding = function (startNode, targetNode, heuristicFunc, movementType, cutCorners) {
-            aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners);
+        astarAlgorithmJS.aStarPathfinding = function (startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {
+            aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout);
         };
     });
 })(window);
