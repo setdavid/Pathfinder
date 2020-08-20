@@ -18,80 +18,79 @@
         </div>
     </div>
     <div id="main-content">
+        <div class="options">
+            <button id="clear-paths-btn">CLEAR PATHS / END SIMULATION</button>
+            <button id="clear-blocks-btn">CLEAR WALL BLOCKS</button>
+            <button id="clear-all-btn">CLEAR ALL</button>
+        </div>
         <div id="grid">
             loading :)
         </div>
-        <div class="options">
+        <form id="general-form">
             <div>
-                <button id="clear-paths-btn">CLEAR PATHS / END SIMULATION</button>
-                <button id="clear-blocks-btn">CLEAR WALL BLOCKS</button>
-                <button id="clear-all-btn">CLEAR ALL</button>
-            </div>
-            <form id="general-form">
                 <button id="submit-btn" type="submit">RUN PATHFINDER</button>
+            </div>
+            <div>
+                <div>Length of Path: <span id="path-length"></span> </div>
+                <div>Block Length of Path: <span id="path-block-length"></span> </div>
+            </div>
+            <div>
                 <div>
-                    <div>Length of Path: <span id="path-length"></span> </div>
-                    <div>Block Length of Path: <span id="path-block-length"></span> </div>
+                    Algorithm
                 </div>
                 <div>
-                    <div>
-                        Algorithm
-                    </div>
-                    <div>
-                        <input type="radio" id="algorithm-choice-1" name="algorithm" value="aStar" checked>
-                        <label for="algorithm-choice-1">A*</label>
-                    </div>
+                    <input type="radio" id="algorithm-choice-1" name="algorithm" value="aStar" checked>
+                    <label for="algorithm-choice-1">A*</label>
+                </div>
+            </div>
+            <div>
+                <div>
+                    Heuristic Function
                 </div>
                 <div>
-                    <div>
-                        Heuristic Function
-                    </div>
-                    <div>
-                        <input type="radio" id="heuristic-function-choice-1" name="heuristic-function" value="manhattan"
-                            checked>
-                        <label for="heuristic-function-choice-1">Manhattan</label>
-                        <input type="radio" id="heuristic-function-choice-2" name="heuristic-function"
-                            value="euclidian">
-                        <label for="heuristic-function-choice-2">Euclidian</label>
-                    </div>
+                    <input type="radio" id="heuristic-function-choice-1" name="heuristic-function" value="manhattan"
+                        checked>
+                    <label for="heuristic-function-choice-1">Manhattan</label>
+                    <input type="radio" id="heuristic-function-choice-2" name="heuristic-function" value="euclidian">
+                    <label for="heuristic-function-choice-2">Euclidian</label>
+                </div>
+            </div>
+            <div>
+                <div>
+                    Movement Type
                 </div>
                 <div>
-                    <div>
-                        Movement Type
-                    </div>
-                    <div>
-                        <input type="radio" id="movement-type-choice-1" name="movement-type" value="diagonal" checked>
-                        <label for="movement-type-choice-1">Diagonal</label>
-                        <input type="radio" id="movement-type-choice-2" name="movement-type" value="nondiagonal">
-                        <label for="movement-type-choice-2">Nondiagonal</label>
-                    </div>
+                    <input type="radio" id="movement-type-choice-1" name="movement-type" value="diagonal" checked>
+                    <label for="movement-type-choice-1">Diagonal</label>
+                    <input type="radio" id="movement-type-choice-2" name="movement-type" value="nondiagonal">
+                    <label for="movement-type-choice-2">Nondiagonal</label>
+                </div>
+            </div>
+            <div>
+                <div>
+                    Cut Corners
                 </div>
                 <div>
-                    <div>
-                        Cut Corners
-                    </div>
-                    <div>
-                        <input type="radio" id="cut-corners-choice-1" name="cut-corners" value="true" checked>
-                        <label for="cut-corners-choice-1">Enable</label>
-                        <input type="radio" id="cut-corners-choice-2" name="cut-corners" value="false">
-                        <label for="cut-corners-choice-2">Disable</label>
-                    </div>
+                    <input type="radio" id="cut-corners-choice-1" name="cut-corners" value="true" checked>
+                    <label for="cut-corners-choice-1">Enable</label>
+                    <input type="radio" id="cut-corners-choice-2" name="cut-corners" value="false">
+                    <label for="cut-corners-choice-2">Disable</label>
+                </div>
+            </div>
+            <div>
+                <div>
+                    Speed
                 </div>
                 <div>
-                    <div>
-                        Speed
-                    </div>
-                    <div>
-                        <input type="radio" id="speed-choice-1" name="speed" value="10" checked>
-                        <label for="speed-choice-1">Fast</label>
-                        <input type="radio" id="speed-choice-2" name="speed" value="250">
-                        <label for="speed-choice-2">Moderate</label>
-                        <input type="radio" id="speed-choice-3" name="speed" value="1000">
-                        <label for="speed-choice-3">Slow</label>
-                    </div>
+                    <input type="radio" id="speed-choice-1" name="speed" value="10" checked>
+                    <label for="speed-choice-1">Fast</label>
+                    <input type="radio" id="speed-choice-2" name="speed" value="250">
+                    <label for="speed-choice-2">Moderate</label>
+                    <input type="radio" id="speed-choice-3" name="speed" value="1000">
+                    <label for="speed-choice-3">Slow</label>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </body>
 
