@@ -13,6 +13,9 @@
     let moveTarget = false;
     let currTarget = null;
 
+    interactionsJS.totalPath = null;
+    interactionsJS.travelIndex = 0;
+
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
@@ -34,6 +37,25 @@
         document.querySelector("#clear-all-btn").addEventListener("click", function () {
             if (!interactionsJS.simulationRunning) {
                 global.updateJS.clear(gridArray, rowDimension, colDimension, true, true);
+            }
+        });
+
+        document.querySelector("#update-path-btn").addEventListener("click", function () {
+        });
+
+        document.querySelector("#travel-forward-btn").addEventListener("click", function () {
+            if (interactionsJS.totalPath && (interactionsJS.totalPath[interactionsJS.travelIndex] != currTarget)) {
+                global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
+                interactionsJS.travelIndex++;
+                global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
+            }
+        });
+
+        document.querySelector("#travel-backward-btn").addEventListener("click", function () {
+            if (interactionsJS.totalPath && (interactionsJS.totalPath[interactionsJS.travelIndex] != currStart)) {
+                global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
+                interactionsJS.travelIndex--;
+                global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
             }
         });
 
@@ -85,6 +107,12 @@
 
                 if (pfSettings.userSettings.algorithm == "aStar") {
                     global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
+
+                    if (interactionsJS.totalPath) {
+                        global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
+                    }
+                    interactionsJS.totalPath = null;
+                    interactionsJS.travelIndex = 0;
 
                     global.astarAlgorithmJS.aStarPathfinding(currStart,
                         currTarget,

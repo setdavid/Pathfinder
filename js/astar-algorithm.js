@@ -40,7 +40,7 @@
                     analyzeNeighbors(currentNode, targetNode, heuristicFunc, movementType, cutCorners);
 
                     if (openSet.length != 0) {
-                        window.setTimeout(function () {
+                        return window.setTimeout(function () {
                             whileLoop();
                         }, timeout);
                     } else {
@@ -237,23 +237,26 @@
                 }
             }
 
-            travelPath(0);
+            // travelPath(0);
 
-            function travelPath(travelIndex) {
-                if (totalPath[travelIndex] == targetNode) {
-                    return;
-                } else {
-                    global.updateJS.toggleTravelerDrawUpdate(totalPath[travelIndex]);
-                    window.setTimeout(function () {
-                        global.updateJS.toggleTravelerDrawUpdate(totalPath[travelIndex]);
+            // function travelPath(travelIndex) {
+            //     if (totalPath[travelIndex] == targetNode) {
+            //         return;
+            //     } else {
+            //         global.updateJS.toggleTravelerDrawUpdate(totalPath[travelIndex]);
+            //         window.setTimeout(function () {
+            //             global.updateJS.toggleTravelerDrawUpdate(totalPath[travelIndex]);
 
-                        travelPath(travelIndex + 1);
-                    }, 150);
+            //             travelPath(travelIndex + 1);
+            //         }, 150);
 
-                }
-            }
+            //     }
+            // }
 
             global.interactionsJS.simulationRunning = false;
+
+            global.interactionsJS.totalPath = totalPath;
+            global.updateJS.toggleTravelerDrawUpdate(totalPath[global.interactionsJS.travelIndex]);
 
             return totalPath;
         }

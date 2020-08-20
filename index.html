@@ -19,9 +19,16 @@
     </div>
     <div id="main-content">
         <div class="options">
-            <button id="clear-paths-btn">CLEAR PATHS / END SIMULATION</button>
-            <button id="clear-blocks-btn">CLEAR WALL BLOCKS</button>
-            <button id="clear-all-btn">CLEAR ALL</button>
+            <div>
+                <button id="clear-paths-btn">CLEAR PATHS / END SIMULATION</button>
+                <button id="clear-blocks-btn">CLEAR WALL BLOCKS</button>
+                <button id="clear-all-btn">CLEAR ALL</button>
+            </div>
+            <div>
+                <button id="update-path-btn">UPDATE PATH</button>
+                <button id="travel-forward-btn">TRAVEL FORWARD</button>
+                <button id="travel-backward-btn">TRAVEL BACKWARD</button>
+            </div>
         </div>
         <div id="grid">
             loading :)
@@ -82,7 +89,7 @@
                     Speed
                 </div>
                 <div>
-                    <input type="radio" id="speed-choice-1" name="speed" value="10" checked>
+                    <input type="radio" id="speed-choice-1" name="speed" value="0" checked>
                     <label for="speed-choice-1">Fast</label>
                     <input type="radio" id="speed-choice-2" name="speed" value="250">
                     <label for="speed-choice-2">Moderate</label>

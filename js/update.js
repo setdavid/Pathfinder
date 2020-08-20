@@ -239,9 +239,9 @@
 
         gridArrayTile.classList.toggle("traveler");
 
-        window.setTimeout(function () {
-            gridArrayTile.classList.toggle("traveler");
-        }, 150);
+        // window.setTimeout(function () {
+        //     gridArrayTile.classList.toggle("traveler");
+        // }, 150);
     }
 
     updateJS.toggleTravelerDrawUpdate = function (gridArrayNode) {
