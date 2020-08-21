@@ -101,6 +101,9 @@
                                 openSet.push(neighborNode);
                                 neighborNode.setInOpenSet(true);
                             }
+
+                            global.interactionsJS.nodesAnalyzed++;
+                            global.updateJS.nodesAnalyzedUpdate(global.interactionsJS.nodesAnalyzed);
                         }
                     }
                 }
@@ -230,6 +233,9 @@
             global.updateJS.pathLengthUpdate(targetNode.gScore);
             global.updateJS.pathBlockLengthUpdate(totalPath.length - 1);
 
+            global.interactionsJS.totalPath = totalPath;
+            global.updateJS.toggleTravelerDrawUpdate(totalPath[global.interactionsJS.travelIndex]);
+
             function reconstructUpdate() {
                 if (currentNode.inClosedSet && !currentNode.inOpenSet) {
                     totalPath.unshift(currentNode);
@@ -255,9 +261,6 @@
 
             global.interactionsJS.simulationRunning = false;
 
-            global.interactionsJS.totalPath = totalPath;
-            global.updateJS.toggleTravelerDrawUpdate(totalPath[global.interactionsJS.travelIndex]);
-
             return totalPath;
         }
 
@@ -273,6 +276,7 @@
             console.log(explanation);
             global.updateJS.pathLengthUpdate(explanation);
             global.updateJS.pathBlockLengthUpdate(explanation);
+            global.updateJS.nodesAnalyzedUpdate(explanation);
 
             global.interactionsJS.simulationRunning = false;
         }

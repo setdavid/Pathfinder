@@ -16,6 +16,8 @@
     interactionsJS.totalPath = null;
     interactionsJS.travelIndex = 0;
 
+    interactionsJS.nodesAnalyzed = 0;
+
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.pathfindingJS.rowDimension;
@@ -41,6 +43,7 @@
         });
 
         document.querySelector("#update-path-btn").addEventListener("click", function () {
+            
         });
 
         document.querySelector("#travel-forward-btn").addEventListener("click", function () {
@@ -111,8 +114,15 @@
                     if (interactionsJS.totalPath) {
                         global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
                     }
+
                     interactionsJS.totalPath = null;
                     interactionsJS.travelIndex = 0;
+
+                    interactionsJS.nodesAnalyzed = 0;
+
+                    global.updateJS.pathLengthUpdate("simulation in progress");
+                    global.updateJS.pathBlockLengthUpdate("simulation in progress");
+                    global.updateJS.nodesAnalyzedUpdate(0);
 
                     global.astarAlgorithmJS.aStarPathfinding(currStart,
                         currTarget,

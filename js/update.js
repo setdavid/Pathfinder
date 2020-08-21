@@ -122,6 +122,14 @@
         pathBlockLengthUpdate(length);
     }
 
+    function nodesAnalyzedUpdate(length) {
+        document.querySelector("#nodes-analyzed").innerHTML = length;
+    }
+
+    updateJS.nodesAnalyzedUpdate = function (length) {
+        nodesAnalyzedUpdate(length);
+    }
+
     function startDrawUpdate(gridArrayNode) {
         let gridArrayTile = nodeToTile(gridArrayNode);
 
@@ -249,6 +257,12 @@
     }
 
     function clear(gridArray, rowDimension, colDimension, clearPaths, clearBlocks) {
+        if (clearPaths && global.interactionsJS.totalPath) {
+            toggleTravelerDrawUpdate(global.interactionsJS.totalPath[interactionsJS.travelIndex]);
+            global.interactionsJS.totalPath = null;
+            global.interactionsJS.travelIndex = 0;
+        }
+
         for (let row = 0; row < rowDimension; row++) {
             for (let col = 0; col < colDimension; col++) {
                 if (clearPaths) {
