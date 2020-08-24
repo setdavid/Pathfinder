@@ -5,7 +5,10 @@
     window.addEventListener("DOMContentLoaded", function () {
         let rowDimension = global.gridSetupJS.rowDimension;
         let colDimension = global.gridSetupJS.colDimension;
+
         let scale = 10;
+
+        gridArrayType = "";
 
         let gridArray = new Array();
 
@@ -20,6 +23,7 @@
                 } else {
                     selectedType = "tile";
                 }
+
 
                 gridArray[row][col] = {
                     type: null,
@@ -44,6 +48,7 @@
                     },
                     row: row,
                     col: col,
+
                     indexInOpenSet: 0,
                     inOpenSet: false,
                     setInOpenSet: function (newValue) {
@@ -64,6 +69,7 @@
                     fScore: Infinity,
                     cameFrom: null,
                     clearPaths: function () {
+                        gridArray[row][col].indexInOpenSet = 0;
                         gridArray[row][col].inOpenSet = false;
                         gridArray[row][col].inClosedSet = false;
 
@@ -102,7 +108,6 @@
             return euclidianHFunc(node, targetNode);
         };
 
-
         function manhattanHFunc(node, targetNode) {
             return scale * (Math.abs(node.col - targetNode.col) + Math.abs(node.row - targetNode.row));
         }
@@ -111,24 +116,7 @@
             return manhattanHFunc(node, targetNode);
         };
 
-        //testing purposes
-        // document.querySelector("#tile0404").addEventListener("click", function () {
-        //     gridArray[0][0].fScore += 1;
-        //     updateJS.fScoreDrawUpdate(gridArray[0][0]);
-        //     updateJS.openSetDrawUpdate(gridArray[0][0]);
-        // });
-
-        // document.querySelector("#tile0000").addEventListener("click", function () {
-        //     // gridArray[0][1].fScore += 1;
-        //     // updateJS.fScoreDrawUpdate(gridArray[0][1]);
-        //     // updateJS.closedSetDrawUpdate(gridArray[0][0]);
-
-        //     global.astarAlgorithmJS.aStarPathfinding(gridArray[0][0], gridArray[rowDimension - 1][colDimension - 1], euclidianHFunc, "diagonal", true);
-        // });
-
         pathfindingJS.gridArray = gridArray;
-        pathfindingJS.rowDimension = rowDimension;
-        pathfindingJS.colDimension = colDimension;
     });
 
 })(window);

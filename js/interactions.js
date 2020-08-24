@@ -20,8 +20,8 @@
 
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
-        let rowDimension = global.pathfindingJS.rowDimension;
-        let colDimension = global.pathfindingJS.colDimension;
+        let rowDimension = global.gridSetupJS.rowDimension;
+        let colDimension = global.gridSetupJS.colDimension;
 
         currStart = gridArray[0][0];
         currTarget = gridArray[rowDimension - 1][colDimension - 1];

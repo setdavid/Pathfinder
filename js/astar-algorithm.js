@@ -4,8 +4,8 @@
 
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
-        let rowDimension = global.pathfindingJS.rowDimension;
-        let colDimension = global.pathfindingJS.colDimension;
+        let rowDimension = global.gridSetupJS.rowDimension;
+        let colDimension = global.gridSetupJS.colDimension;
         let openSet;
 
         function aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {
