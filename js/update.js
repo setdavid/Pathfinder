@@ -2,96 +2,7 @@
     let updateJS = {};
     global.updateJS = updateJS;
 
-    function disableAllStates(gridArrayTile) {
-        if (gridArrayTile.classList.contains("in-open-set")) {
-            gridArrayTile.classList.toggle("in-open-set")
-        }
-
-        if (gridArrayTile.classList.contains("in-closed-set")) {
-            gridArrayTile.classList.toggle("in-closed-set")
-        }
-
-        if (gridArrayTile.classList.contains("reconstruct")) {
-            gridArrayTile.classList.toggle("reconstruct");
-        }
-
-        //for future use
-        // if (gridArrayTile.classList.contains("start")) {
-        //     gridArrayTile.classList.toggle("start");
-        // }
-
-        // if (gridArrayTile.classList.contains("target")) {
-        //     gridArrayTile.classList.toggle("target");
-        // }
-    }
-
-    updateJS.disableAllStates = function (gridArrayTile) {
-        disableAllStates(gridArrayTile);
-    }
-
-    function nodeToTile(gridArrayNode) {
-        let gridArrayNodeRowString = "" + gridArrayNode.row;
-        let gridArrayNodeColString = "" + gridArrayNode.col;
-
-        if (gridArrayNode.row < 10) {
-            gridArrayNodeRowString = "0" + gridArrayNode.row;
-        }
-
-        if (gridArrayNode.col < 10) {
-            gridArrayNodeColString = "0" + gridArrayNode.col;
-        }
-
-        return document.querySelector("#tile" + gridArrayNodeRowString + "" + gridArrayNodeColString);
-    }
-
-    updateJS.nodeToTile = function (gridArrayNode) {
-        return nodeToTile(gridArrayNode);
-    }
-
-    function fScoreDrawUpdate(gridArrayNode) {
-        let gridArrayNodefScore = Math.trunc(gridArrayNode.fScore);
-
-        let gridArrayTile = nodeToTile(gridArrayNode);
-
-        gridArrayTile.innerHTML = "<div>" + gridArrayNodefScore + "</div>";
-    }
-
-    updateJS.fScoreDrawUpdate = function (gridArrayNode) {
-        fScoreDrawUpdate(gridArrayNode);
-    }
-
-    function openSetDrawUpdate(gridArrayNode) {
-        let gridArrayTile = nodeToTile(gridArrayNode);
-
-        disableAllStates(gridArrayTile);
-
-        if (!gridArrayTile.classList.contains("in-open-set")) {
-            gridArrayTile.classList.toggle("in-open-set");
-        }
-
-        // fScoreDrawUpdate(gridArrayNode);
-    }
-
-    updateJS.openSetDrawUpdate = function (gridArrayNode) {
-        openSetDrawUpdate(gridArrayNode);
-    }
-
-    function closedSetDrawUpdate(gridArrayNode) {
-        let gridArrayTile = nodeToTile(gridArrayNode);
-
-        disableAllStates(gridArrayTile);
-
-        if (!gridArrayTile.classList.contains("in-closed-set")) {
-            gridArrayTile.classList.toggle("in-closed-set");
-        }
-
-        // fScoreDrawUpdate(gridArrayNode);
-    }
-
-    updateJS.closedSetDrawUpdate = function (gridArrayNode) {
-        closedSetDrawUpdate(gridArrayNode);
-    }
-
+    //UPDATES FOR ALL ALGORITHMS
     function reconstructDrawUpdate(gridArrayNode) {
         let gridArrayTile = nodeToTile(gridArrayNode);
 
@@ -281,5 +192,98 @@
     updateJS.clear = function (gridArray, rowDimension, colDimension, clearPaths, clearBlocks) {
         clear(gridArray, rowDimension, colDimension, clearPaths, clearBlocks);
     }
+
+    function disableAllStates(gridArrayTile) {
+        if (gridArrayTile.classList.contains("in-open-set")) {
+            gridArrayTile.classList.toggle("in-open-set")
+        }
+
+        if (gridArrayTile.classList.contains("in-closed-set")) {
+            gridArrayTile.classList.toggle("in-closed-set")
+        }
+
+        if (gridArrayTile.classList.contains("reconstruct")) {
+            gridArrayTile.classList.toggle("reconstruct");
+        }
+
+        //for future use
+        // if (gridArrayTile.classList.contains("start")) {
+        //     gridArrayTile.classList.toggle("start");
+        // }
+
+        // if (gridArrayTile.classList.contains("target")) {
+        //     gridArrayTile.classList.toggle("target");
+        // }
+    }
+
+    updateJS.disableAllStates = function (gridArrayTile) {
+        disableAllStates(gridArrayTile);
+    }
+
+    function nodeToTile(gridArrayNode) {
+        let gridArrayNodeRowString = "" + gridArrayNode.row;
+        let gridArrayNodeColString = "" + gridArrayNode.col;
+
+        if (gridArrayNode.row < 10) {
+            gridArrayNodeRowString = "0" + gridArrayNode.row;
+        }
+
+        if (gridArrayNode.col < 10) {
+            gridArrayNodeColString = "0" + gridArrayNode.col;
+        }
+
+        return document.querySelector("#tile" + gridArrayNodeRowString + "" + gridArrayNodeColString);
+    }
+
+    updateJS.nodeToTile = function (gridArrayNode) {
+        return nodeToTile(gridArrayNode);
+    }
+
+    //UPDATES FOR A* ALGORITHM
+    function fScoreDrawUpdate(gridArrayNode) {
+        let gridArrayNodefScore = Math.trunc(gridArrayNode.fScore);
+
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        gridArrayTile.innerHTML = "<div>" + gridArrayNodefScore + "</div>";
+    }
+
+    updateJS.fScoreDrawUpdate = function (gridArrayNode) {
+        fScoreDrawUpdate(gridArrayNode);
+    }
+
+    function openSetDrawUpdate(gridArrayNode) {
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        disableAllStates(gridArrayTile);
+
+        if (!gridArrayTile.classList.contains("in-open-set")) {
+            gridArrayTile.classList.toggle("in-open-set");
+        }
+
+        // fScoreDrawUpdate(gridArrayNode);
+    }
+
+    updateJS.openSetDrawUpdate = function (gridArrayNode) {
+        openSetDrawUpdate(gridArrayNode);
+    }
+
+    function closedSetDrawUpdate(gridArrayNode) {
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        disableAllStates(gridArrayTile);
+
+        if (!gridArrayTile.classList.contains("in-closed-set")) {
+            gridArrayTile.classList.toggle("in-closed-set");
+        }
+
+        // fScoreDrawUpdate(gridArrayNode);
+    }
+
+    updateJS.closedSetDrawUpdate = function (gridArrayNode) {
+        closedSetDrawUpdate(gridArrayNode);
+    }
+
+    //UPDATES FOR LPA* ALGORITHM
 
 })(window);

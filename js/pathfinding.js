@@ -24,8 +24,8 @@
                     selectedType = "tile";
                 }
 
-
                 gridArray[row][col] = {
+                    //VALUES FOR ALL ALGORITHMS
                     type: null,
                     setType: function (newValue) {
                         gridArray[row][col].type = newValue;
@@ -49,6 +49,7 @@
                     row: row,
                     col: col,
 
+                    //VALUES FOR A* ALGORITHM
                     indexInOpenSet: 0,
                     inOpenSet: false,
                     setInOpenSet: function (newValue) {
@@ -81,7 +82,24 @@
                         gridArray[row][col].h = Infinity;
                         gridArray[row][col].fScore = Infinity;
                         gridArray[row][col].cameFrom = null;
-                    }
+                    },
+
+                    //VALUES FOR LPA* ALGORITHM
+                    gValue: Infinity,
+                    rhsValue: Infinity,
+                    key: [Infinity, Infinity],
+                    pred: [],
+                    succ: [],
+                    inPQ: false,
+                    setInPQ: function (newValue) {
+                        gridArray[row][col].inPQ = newValue;
+                        if (newValue) {
+                            // global.updateJS.pQDrawUpdate(gridArray[row][col]);
+                        }
+                        else {
+                            // global.updateJS.(gridArray[row][col]);
+                        }
+                    },
                 };
 
                 gridArray[row][col].setType(selectedType);
