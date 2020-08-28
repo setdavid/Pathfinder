@@ -2,7 +2,87 @@
     let updateJS = {};
     global.updateJS = updateJS;
 
-    //UPDATES FOR ALL ALGORITHMS
+    //UPDATES FOR ALL ALGORITHMS -----------------------------------------------------
+    function clear(gridArray, rowDimension, colDimension, clearPaths, clearBlocks) {
+        if (clearPaths && global.interactionsJS.totalPath) {
+            toggleTravelerDrawUpdate(global.interactionsJS.totalPath[interactionsJS.travelIndex]);
+            global.interactionsJS.totalPath = null;
+            global.interactionsJS.travelIndex = 0;
+        }
+
+        for (let row = 0; row < rowDimension; row++) {
+            for (let col = 0; col < colDimension; col++) {
+                if (clearPaths) {
+                    gridArray[row][col].clearPaths();
+                }
+
+                if (clearBlocks) {
+                    if (gridArray[row][col].type == "block") {
+                        gridArray[row][col].setType("tile");
+                    }
+                }
+            }
+        }
+    }
+
+    updateJS.clear = function (gridArray, rowDimension, colDimension, clearPaths, clearBlocks) {
+        clear(gridArray, rowDimension, colDimension, clearPaths, clearBlocks);
+    }
+
+    function disableAllStates(gridArrayTile) {
+        if (gridArrayTile.classList.contains("in-open-set")) {
+            gridArrayTile.classList.toggle("in-open-set")
+        }
+
+        if (gridArrayTile.classList.contains("in-closed-set")) {
+            gridArrayTile.classList.toggle("in-closed-set")
+        }
+
+        if (gridArrayTile.classList.contains("in-pQ")) {
+            gridArrayTile.classList.toggle("in-pQ");
+        }
+
+        if (gridArrayTile.classList.contains("local-con")) {
+            gridArrayTile.classList.toggle("local-con");
+        }
+
+        if (gridArrayTile.classList.contains("reconstruct")) {
+            gridArrayTile.classList.toggle("reconstruct");
+        }
+
+        //for future use
+        // if (gridArrayTile.classList.contains("start")) {
+        //     gridArrayTile.classList.toggle("start");
+        // }
+
+        // if (gridArrayTile.classList.contains("target")) {
+        //     gridArrayTile.classList.toggle("target");
+        // }
+    }
+
+    updateJS.disableAllStates = function (gridArrayTile) {
+        disableAllStates(gridArrayTile);
+    }
+
+    function nodeToTile(gridArrayNode) {
+        let gridArrayNodeRowString = "" + gridArrayNode.row;
+        let gridArrayNodeColString = "" + gridArrayNode.col;
+
+        if (gridArrayNode.row < 10) {
+            gridArrayNodeRowString = "0" + gridArrayNode.row;
+        }
+
+        if (gridArrayNode.col < 10) {
+            gridArrayNodeColString = "0" + gridArrayNode.col;
+        }
+
+        return document.querySelector("#tile" + gridArrayNodeRowString + "" + gridArrayNodeColString);
+    }
+
+    updateJS.nodeToTile = function (gridArrayNode) {
+        return nodeToTile(gridArrayNode);
+    }
+
     function reconstructDrawUpdate(gridArrayNode) {
         let gridArrayTile = nodeToTile(gridArrayNode);
 
@@ -167,79 +247,7 @@
         toggleTravelerDrawUpdate(gridArrayNode);
     }
 
-    function clear(gridArray, rowDimension, colDimension, clearPaths, clearBlocks) {
-        if (clearPaths && global.interactionsJS.totalPath) {
-            toggleTravelerDrawUpdate(global.interactionsJS.totalPath[interactionsJS.travelIndex]);
-            global.interactionsJS.totalPath = null;
-            global.interactionsJS.travelIndex = 0;
-        }
-
-        for (let row = 0; row < rowDimension; row++) {
-            for (let col = 0; col < colDimension; col++) {
-                if (clearPaths) {
-                    gridArray[row][col].clearPaths();
-                }
-
-                if (clearBlocks) {
-                    if (gridArray[row][col].type == "block") {
-                        gridArray[row][col].setType("tile");
-                    }
-                }
-            }
-        }
-    }
-
-    updateJS.clear = function (gridArray, rowDimension, colDimension, clearPaths, clearBlocks) {
-        clear(gridArray, rowDimension, colDimension, clearPaths, clearBlocks);
-    }
-
-    function disableAllStates(gridArrayTile) {
-        if (gridArrayTile.classList.contains("in-open-set")) {
-            gridArrayTile.classList.toggle("in-open-set")
-        }
-
-        if (gridArrayTile.classList.contains("in-closed-set")) {
-            gridArrayTile.classList.toggle("in-closed-set")
-        }
-
-        if (gridArrayTile.classList.contains("reconstruct")) {
-            gridArrayTile.classList.toggle("reconstruct");
-        }
-
-        //for future use
-        // if (gridArrayTile.classList.contains("start")) {
-        //     gridArrayTile.classList.toggle("start");
-        // }
-
-        // if (gridArrayTile.classList.contains("target")) {
-        //     gridArrayTile.classList.toggle("target");
-        // }
-    }
-
-    updateJS.disableAllStates = function (gridArrayTile) {
-        disableAllStates(gridArrayTile);
-    }
-
-    function nodeToTile(gridArrayNode) {
-        let gridArrayNodeRowString = "" + gridArrayNode.row;
-        let gridArrayNodeColString = "" + gridArrayNode.col;
-
-        if (gridArrayNode.row < 10) {
-            gridArrayNodeRowString = "0" + gridArrayNode.row;
-        }
-
-        if (gridArrayNode.col < 10) {
-            gridArrayNodeColString = "0" + gridArrayNode.col;
-        }
-
-        return document.querySelector("#tile" + gridArrayNodeRowString + "" + gridArrayNodeColString);
-    }
-
-    updateJS.nodeToTile = function (gridArrayNode) {
-        return nodeToTile(gridArrayNode);
-    }
-
-    //UPDATES FOR A* ALGORITHM
+    //UPDATES FOR A* ALGORITHM -----------------------------------------------------
     function fScoreDrawUpdate(gridArrayNode) {
         let gridArrayNodefScore = Math.trunc(gridArrayNode.fScore);
 
@@ -284,6 +292,53 @@
         closedSetDrawUpdate(gridArrayNode);
     }
 
-    //UPDATES FOR LPA* ALGORITHM
+    //UPDATES FOR LPA* ALGORITHM -----------------------------------------------------
+    function inPQDrawUpdate(gridArrayNode, setting) {
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        disableAllStates(gridArrayTile);
+
+        if (setting && !gridArrayTile.classList.contains("in-pQ")) {
+            gridArrayTile.classList.toggle("in-pQ");
+        }
+
+        else if (!setting && gridArrayTile.classList.contains("in-pQ")) {
+            gridArrayTile.classList.toggle("in-pQ");
+        }
+
+        // fScoreDrawUpdate(gridArrayNode);
+    }
+
+    updateJS.inPQDrawUpdate = function (gridArrayNode, setting) {
+        inPQDrawUpdate(gridArrayNode, setting);
+    }
+
+    function localConDrawUpdate(gridArrayNode) {
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        disableAllStates(gridArrayTile);
+
+        if (!gridArrayTile.classList.contains("local-con")) {
+            gridArrayTile.classList.toggle("local-con");
+        }
+    }
+
+    updateJS.localConDrawUpdate = function (gridArrayNode) {
+        localConDrawUpdate(gridArrayNode);
+    }
+
+    function keyDrawUpdate(gridArrayNode) {
+        let gridArrayNodeKey0 = Math.trunc(gridArrayNode.key[0]);
+        let gridArrayNodeKey1 = Math.trunc(gridArrayNode.key[1]);
+
+        let gridArrayTile = nodeToTile(gridArrayNode);
+
+        // console.log(gridArrayNode.key);
+        gridArrayTile.innerHTML = "<div>[" + gridArrayNodeKey0 + ", " + gridArrayNodeKey1 + "]</div>";
+    }
+
+    updateJS.keyDrawUpdate = function (gridArrayNode) {
+        keyDrawUpdate(gridArrayNode);
+    }
 
 })(window);

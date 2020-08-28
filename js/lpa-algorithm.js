@@ -19,7 +19,7 @@
                     if (compareKeys(pQ.array[i].key, lowestKey)) {
                         lowestKey[0] = pQ.array[i].key[0];
                         lowestKey[1] = pQ.array[i].key[1];
-                        lowestKeyIndex = i;
+                        pQ.lowestKeyIndex = i;
                     }
 
                     // if (pQ.array[i].key[0] < lowestKey[0]) {
@@ -46,6 +46,7 @@
             pop: function () {
                 let currentNode = pQ.array[pQ.lowestKeyIndex];
                 pQ.array.splice(pQ.lowestKeyIndex, 1);
+                currentNode.setInPQ(false);
                 return currentNode;
             },
             insert: function (insertNode, key) {
@@ -53,11 +54,11 @@
                     insertNode.key = key;
                     pQ.array.push(insertNode);
                     insertNode.setInPQ(true);
+
+                    // global.updateJS.keyDrawUpdate(insertNode);
                 }
             },
             remove: function (removeNode) {
-                let nodeFound = false;
-
                 if (removeNode.inPQ) {
                     let index = nodeInArray(removeNode, pQ.array);
                     pQ.array.splice(index, 1);
@@ -71,6 +72,7 @@
             global.interactionsJS.simulationRunning = true;
 
             pQ.array = new Array();
+            pQ.lowestKeyIndex = 0;
 
             initialize();
 
@@ -91,11 +93,13 @@
 
             function updateVertex(node) {
                 if (node != startNode) {
+
                     let predRhsArray = [];
                     for (let i = 0; i < node.pred.length; i++) {
                         predRhsArray.push(node.pred[i].gValue + weightFunc(node, node.pred[i]));
                     }
-                    node.rhsValue = Math.min(predRhsArray);
+
+                    node.rhsValue = Math.min.apply(null, predRhsArray);
                 }
 
                 if (node.inPQ) {
@@ -104,7 +108,12 @@
 
                 if (node.gValue != node.rhsValue) {
                     pQ.insert(node, calculateKey(node));
+                } else {
+                    node.setLocalCon();
                 }
+
+                global.interactionsJS.nodesAnalyzed++;
+                global.updateJS.nodesAnalyzedUpdate(global.interactionsJS.nodesAnalyzed);
             }
 
             function computeShortestPath() {
@@ -113,6 +122,8 @@
 
                 if (currentNode.gValue > currentNode.rhsValue) {
                     currentNode.gValue = currentNode.rhsValue;
+
+                    currentNode.setLocalCon();
 
                     for (let i = 0; i < currentNode.succ.length; i++) {
                         updateVertex(currentNode.succ[i]);
@@ -131,11 +142,18 @@
                     return window.setTimeout(function () {
                         computeShortestPath();
                     }, timeout);
+                } else {
+                    if (currentNode == targetNode) {
+                        console.log(currentNode);
+                        reconstructPath(currentNode);
+                    } else {
+                        if (global.interactionsJS.simulationRunning) {
+                            return failure("no path");
+                        } else {
+                            return failure("interrupted");
+                        }
+                    }
                 }
-
-                // else {
-                //     return failure("no path");
-                // }
             }
 
             function updateSuccessors(currentNode) {
@@ -149,15 +167,12 @@
                             (gridArray[row][col].type != "block") &&
                             (nodeInArray(gridArray[row][col], currentNode.pred) === null) &&
                             (moveRestrictions(row, col, currentNode))) {
-                            succ.push(gridArray[row][col]);
+                            let neighborNode = gridArray[row][col];
+                            succ.push(neighborNode);
 
-                            if (nodeInArray(currentNode, gridArray[row][col].pred) === null) {
-                                gridArray[row][col].pred.push(currentNode);
+                            if (nodeInArray(currentNode, neighborNode.pred) === null) {
+                                neighborNode.pred.push(currentNode);
                             }
-
-                            // global.updateJS.fScoreDrawUpdate(neighborNode);
-                            // global.interactionsJS.nodesAnalyzed++;
-                            // global.updateJS.nodesAnalyzedUpdate(global.interactionsJS.nodesAnalyzed);
                         }
                     }
                 }
@@ -268,6 +283,51 @@
                     return locationInfo;
                 }
             }
+
+            function reconstructPath(currentNode) {
+                let totalPath = new Array();
+
+                while ((currentNode != startNode) && global.interactionsJS.simulationRunning) {
+                    reconstructUpdate();
+
+                    let nextNode = currentNode.pred[0];
+
+                    for (let i = 0; i < currentNode.pred.length; i++) {
+                        if ((currentNode.pred[i].gValue < nextNode.gValue) ||
+                            ((currentNode.pred[i].gValue == nextNode.gValue) &&
+                                (currentNode.pred[i].key[0] < nextNode.key[0]))) {
+                            nextNode = currentNode.pred[i];
+                        }
+                    }
+
+                    currentNode = nextNode;
+                }
+
+                if (global.interactionsJS.simulationRunning) {
+                    reconstructUpdate();
+
+                    global.updateJS.pathLengthUpdate(targetNode.gValue);
+                    global.updateJS.pathBlockLengthUpdate(totalPath.length - 1);
+
+                    global.interactionsJS.totalPath = totalPath;
+                    global.updateJS.toggleTravelerDrawUpdate(totalPath[global.interactionsJS.travelIndex]);
+                }
+
+                function reconstructUpdate() {
+                    if (!global.interactionsJS.simulationRunning) {
+                        return failure("interrupted");
+                    } else {
+                        if (!currentNode.inPQ) {
+                            totalPath.unshift(currentNode);
+                            global.updateJS.reconstructDrawUpdate(currentNode);
+                        }
+                    }
+                }
+
+                global.interactionsJS.simulationRunning = false;
+
+                return totalPath;
+            }
         }
 
         //return true if key1 < key2
@@ -308,62 +368,22 @@
             return nodeIndex;
         }
 
-        function reconstructPath(startNode, currentNode) {
-            let totalPath = new Array();
-            let targetNode = currentNode;
+        function failure(reason) {
+            let explanation = "";
 
-            while (currentNode != startNode) {
-                reconstructUpdate();
-
-                let nextNode = currentNode.pred[0];
-
-                for (let i = 0; i < currentNode.pred.length; i++) {
-                    if ((currentNode.pred[i].gValue < nextNode.gValue) ||
-                        ((currentNode.pred[i].gValue == nextNode.gValue) &&
-                            (currentNode.pred[i].key[0] < nextNode.key[0]))) {
-                        nextNode = currentNode.pred[i];
-                    }
-                }
-
-                currentNode = nextNode;
+            if (reason == "no path") {
+                explanation = "no path found";
+            } else {
+                explanation = "simulation interrupted"
             }
 
-            reconstructUpdate();
-
-            global.updateJS.pathLengthUpdate(targetNode.gScore);
-            global.updateJS.pathBlockLengthUpdate(totalPath.length - 1);
-
-            global.interactionsJS.totalPath = totalPath;
-            global.updateJS.toggleTravelerDrawUpdate(totalPath[global.interactionsJS.travelIndex]);
-
-            function reconstructUpdate() {
-                if (!currentNode.inPQ) {
-                    totalPath.unshift(currentNode);
-                    global.updateJS.reconstructDrawUpdate(currentNode);
-                }
-            }
+            console.log(explanation);
+            global.updateJS.pathLengthUpdate(explanation);
+            global.updateJS.pathBlockLengthUpdate(explanation);
+            global.updateJS.nodesAnalyzedUpdate(explanation);
 
             global.interactionsJS.simulationRunning = false;
-
-            return totalPath;
         }
-
-        // function failure(reason) {
-        //     let explanation = "";
-
-        //     if (reason == "no path") {
-        //         explanation = "no path found";
-        //     } else {
-        //         explanation = "simulation interrupted"
-        //     }
-
-        //     console.log(explanation);
-        //     global.updateJS.pathLengthUpdate(explanation);
-        //     global.updateJS.pathBlockLengthUpdate(explanation);
-        //     global.updateJS.nodesAnalyzedUpdate(explanation);
-
-        //     global.interactionsJS.simulationRunning = false;
-        // }
 
         astarAlgorithmJS.lpaPathfinding = function (startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {
             lpaPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout);

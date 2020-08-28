@@ -8,7 +8,7 @@
 
         let scale = 10;
 
-        gridArrayType = "";
+        let gridArrayType = "";
 
         let gridArray = new Array();
 
@@ -18,14 +18,14 @@
             for (let col = 0; col < colDimension; col++) {
                 let selectedType = null;
                 let randomNum = Math.random();
-                if (randomNum < 0.3) {
+                if (randomNum < 0) {
                     selectedType = "block";
                 } else {
                     selectedType = "tile";
                 }
 
                 gridArray[row][col] = {
-                    //VALUES FOR ALL ALGORITHMS
+                    //VALUES FOR ALL ALGORITHMS -----------------------------------------------------
                     type: null,
                     setType: function (newValue) {
                         gridArray[row][col].type = newValue;
@@ -48,8 +48,30 @@
                     },
                     row: row,
                     col: col,
+                    clearPaths: function () {
+                        //cleans A*
+                        gridArray[row][col].indexInOpenSet = 0;
+                        gridArray[row][col].inOpenSet = false;
+                        gridArray[row][col].inClosedSet = false;
+                        gridArray[row][col].gScore = Infinity;
+                        gridArray[row][col].h = Infinity;
+                        gridArray[row][col].fScore = Infinity;
+                        gridArray[row][col].cameFrom = null;
 
-                    //VALUES FOR A* ALGORITHM
+                        //cleans LPA*
+                        gridArray[row][col].gValue = Infinity;
+                        gridArray[row][col].rhsValue = Infinity;
+                        gridArray[row][col].key = [Infinity, Infinity];
+                        gridArray[row][col].pred = [];
+                        gridArray[row][col].succ = [];
+                        gridArray[row][col].inPQ = false;
+
+                        global.updateJS.disableAllStates(
+                            global.updateJS.nodeToTile(gridArray[row][col])
+                        );
+                    },
+
+                    //VALUES FOR A* ALGORITHM -----------------------------------------------------
                     indexInOpenSet: 0,
                     inOpenSet: false,
                     setInOpenSet: function (newValue) {
@@ -69,22 +91,8 @@
                     h: Infinity,
                     fScore: Infinity,
                     cameFrom: null,
-                    clearPaths: function () {
-                        gridArray[row][col].indexInOpenSet = 0;
-                        gridArray[row][col].inOpenSet = false;
-                        gridArray[row][col].inClosedSet = false;
 
-                        global.updateJS.disableAllStates(
-                            global.updateJS.nodeToTile(gridArray[row][col])
-                        );
-
-                        gridArray[row][col].gScore = Infinity;
-                        gridArray[row][col].h = Infinity;
-                        gridArray[row][col].fScore = Infinity;
-                        gridArray[row][col].cameFrom = null;
-                    },
-
-                    //VALUES FOR LPA* ALGORITHM
+                    //VALUES FOR LPA* ALGORITHM -----------------------------------------------------
                     gValue: Infinity,
                     rhsValue: Infinity,
                     key: [Infinity, Infinity],
@@ -92,14 +100,16 @@
                     succ: [],
                     inPQ: false,
                     setInPQ: function (newValue) {
-                        gridArray[row][col].inPQ = newValue;
-                        if (newValue) {
-                            // global.updateJS.pQDrawUpdate(gridArray[row][col]);
-                        }
-                        else {
-                            // global.updateJS.(gridArray[row][col]);
+                        if (gridArray[row][col].inPQ != newValue) {
+                            gridArray[row][col].inPQ = newValue;
+                            global.updateJS.inPQDrawUpdate(gridArray[row][col], newValue);
                         }
                     },
+                    setLocalCon: function () {
+                        if (gridArray[row][col].gValue == gridArray[row][col].rhsValue) {
+                            global.updateJS.localConDrawUpdate(gridArray[row][col]);
+                        }
+                    }
                 };
 
                 gridArray[row][col].setType(selectedType);

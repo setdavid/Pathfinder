@@ -28,6 +28,7 @@
 
         document.querySelector("#clear-paths-btn").addEventListener("click", function () {
             global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
+            interactionsJS.simulationRunning = false;
         });
 
         document.querySelector("#clear-blocks-btn").addEventListener("click", function () {
@@ -43,7 +44,7 @@
         });
 
         document.querySelector("#update-path-btn").addEventListener("click", function () {
-            
+
         });
 
         document.querySelector("#travel-forward-btn").addEventListener("click", function () {
@@ -108,23 +109,32 @@
                     pfSettings.userSettings.heuristicFunc = global.pathfindingJS.euclidianHFunc;
                 }
 
+                global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
+
+                if (interactionsJS.totalPath) {
+                    global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
+                }
+
+                interactionsJS.totalPath = null;
+                interactionsJS.travelIndex = 0;
+
+                interactionsJS.nodesAnalyzed = 0;
+
+                global.updateJS.pathLengthUpdate("simulation in progress");
+                global.updateJS.pathBlockLengthUpdate("simulation in progress");
+                global.updateJS.nodesAnalyzedUpdate(0);
+
                 if (pfSettings.userSettings.algorithm == "aStar") {
-                    global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
-
-                    if (interactionsJS.totalPath) {
-                        global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
-                    }
-
-                    interactionsJS.totalPath = null;
-                    interactionsJS.travelIndex = 0;
-
-                    interactionsJS.nodesAnalyzed = 0;
-
-                    global.updateJS.pathLengthUpdate("simulation in progress");
-                    global.updateJS.pathBlockLengthUpdate("simulation in progress");
-                    global.updateJS.nodesAnalyzedUpdate(0);
-
                     global.astarAlgorithmJS.aStarPathfinding(currStart,
+                        currTarget,
+                        pfSettings.userSettings.heuristicFunc,
+                        pfSettings.userSettings.movementType,
+                        pfSettings.userSettings.cutCorners,
+                        pfSettings.userSettings.speed);
+                }
+
+                else if (pfSettings.userSettings.algorithm == "lpa") {
+                    global.astarAlgorithmJS.lpaPathfinding(currStart,
                         currTarget,
                         pfSettings.userSettings.heuristicFunc,
                         pfSettings.userSettings.movementType,
