@@ -24,6 +24,10 @@
     interactionsJS.travelIndex = 0;
 
     interactionsJS.nodesAnalyzed = 0;
+    interactionsJS.setNodesAnalyzed = function (newValue) {
+        interactionsJS.nodesAnalyzed = newValue;
+        global.updateJS.nodesAnalyzedUpdate(newValue);
+    };
 
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
@@ -127,11 +131,10 @@
                 interactionsJS.totalPath = null;
                 interactionsJS.travelIndex = 0;
 
-                interactionsJS.nodesAnalyzed = 0;
+                interactionsJS.setNodesAnalyzed(0);
 
                 global.updateJS.pathLengthUpdate("simulation in progress");
                 global.updateJS.pathBlockLengthUpdate("simulation in progress");
-                global.updateJS.nodesAnalyzedUpdate(0);
 
                 interactionsJS.setPFRunning(true);
 

@@ -112,8 +112,7 @@
                     node.setLocalCon();
                 }
 
-                global.interactionsJS.nodesAnalyzed++;
-                global.updateJS.nodesAnalyzedUpdate(global.interactionsJS.nodesAnalyzed);
+                global.interactionsJS.setNodesAnalyzed(global.interactionsJS.nodesAnalyzed + 1);
             }
 
             function computeShortestPath() {
@@ -311,6 +310,8 @@
 
                     global.interactionsJS.totalPath = totalPath;
                     global.updateJS.toggleTravelerDrawUpdate(totalPath[global.interactionsJS.travelIndex]);
+                } else {
+                    return failure("interrupted");
                 }
 
                 function reconstructUpdate() {
@@ -380,7 +381,7 @@
             console.log(explanation);
             global.updateJS.pathLengthUpdate(explanation);
             global.updateJS.pathBlockLengthUpdate(explanation);
-            global.updateJS.nodesAnalyzedUpdate(explanation);
+            global.interactionsJS.setNodesAnalyzed(explanation);
 
             global.interactionsJS.simulationRunning = false;
         }
