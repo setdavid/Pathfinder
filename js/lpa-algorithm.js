@@ -386,7 +386,7 @@
             global.interactionsJS.simulationRunning = false;
         }
 
-        astarAlgorithmJS.lpaPathfinding = function (startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {
+        lpaAlgorithmJS.lpaPathfinding = function (startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {
             lpaPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout);
         };
     });

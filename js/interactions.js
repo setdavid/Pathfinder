@@ -29,6 +29,8 @@
         global.updateJS.nodesAnalyzedUpdate(newValue);
     };
 
+    interactionsJS.gridArrayType = "";
+
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.gridSetupJS.rowDimension;
@@ -57,7 +59,9 @@
         });
 
         document.querySelector("#update-path-btn").addEventListener("click", function () {
+            if (!interactionsJS.simulationRunning && interactionsJS.pathfinderRunning) {
 
+            }
         });
 
         document.querySelector("#travel-forward-btn").addEventListener("click", function () {
@@ -136,6 +140,8 @@
                 global.updateJS.pathLengthUpdate("simulation in progress");
                 global.updateJS.pathBlockLengthUpdate("simulation in progress");
 
+                interactionsJS.gridArrayType = pfSettings.userSettings.algorithm;
+
                 interactionsJS.setPFRunning(true);
 
                 if (pfSettings.userSettings.algorithm == "aStar") {
@@ -148,7 +154,7 @@
                 }
 
                 else if (pfSettings.userSettings.algorithm == "lpa") {
-                    global.astarAlgorithmJS.lpaPathfinding(currStart,
+                    global.lpaAlgorithmJS.lpaPathfinding(currStart,
                         currTarget,
                         pfSettings.userSettings.heuristicFunc,
                         pfSettings.userSettings.movementType,

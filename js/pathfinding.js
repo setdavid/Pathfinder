@@ -8,8 +8,6 @@
 
         let scale = 10;
 
-        let gridArrayType = "";
-
         let gridArray = new Array();
 
         for (let row = 0; row < rowDimension; row++) {
