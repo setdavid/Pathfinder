@@ -121,6 +121,22 @@
         nodesAnalyzedUpdate(length);
     }
 
+    function pfRunningUpdate(newValue) {
+        let message = "";
+
+        if (newValue) {
+            message = "RUNNING";
+        } else {
+            message = "NOT RUNNING";
+        }
+
+        document.querySelector("#pathfinder-running").innerHTML = message;
+    }
+
+    updateJS.pfRunningUpdate = function (newValue) {
+        pfRunningUpdate(newValue);
+    }
+
     function startDrawUpdate(gridArrayNode) {
         let gridArrayTile = nodeToTile(gridArrayNode);
 
