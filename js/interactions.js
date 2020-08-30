@@ -29,7 +29,7 @@
         global.updateJS.nodesAnalyzedUpdate(newValue);
     };
 
-    interactionsJS.gridArrayType = "";
+    interactionsJS.pfType = "";
 
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
@@ -60,7 +60,7 @@
 
         document.querySelector("#update-path-btn").addEventListener("click", function () {
             if (!interactionsJS.simulationRunning && interactionsJS.pathfinderRunning) {
-
+                console.log(interactionsJS.pfType);
             }
         });
 
@@ -100,6 +100,7 @@
                     targetNode: null,
                     userSettings: userSettings
                 };
+                interactionsJS.pfSettings = pfSettings;
 
                 let dataArray = new Array();
                 let dataArrayIndex = 0;
@@ -140,7 +141,7 @@
                 global.updateJS.pathLengthUpdate("simulation in progress");
                 global.updateJS.pathBlockLengthUpdate("simulation in progress");
 
-                interactionsJS.gridArrayType = pfSettings.userSettings.algorithm;
+                interactionsJS.pfType = pfSettings.userSettings.algorithm;
 
                 interactionsJS.setPFRunning(true);
 

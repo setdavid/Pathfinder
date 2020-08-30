@@ -143,7 +143,6 @@
                     }, timeout);
                 } else {
                     if (currentNode == targetNode) {
-                        console.log(currentNode);
                         reconstructPath(currentNode);
                     } else {
                         if (global.interactionsJS.simulationRunning) {
@@ -375,7 +374,7 @@
             if (reason == "no path") {
                 explanation = "no path found";
             } else {
-                explanation = "simulation interrupted"
+                explanation = "simulation interrupted";
             }
 
             console.log(explanation);
