@@ -133,6 +133,16 @@
                     global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
                 }
 
+                if (moveStart) {
+                    moveStart = false;
+                    global.updateJS.selectedDisabled(currStart);
+                }
+
+                if (moveTarget) {
+                    moveTarget = false;
+                    global.updateJS.selectedDisabled(currTarget);
+                }
+
                 interactionsJS.totalPath = null;
                 interactionsJS.travelIndex = 0;
 
@@ -183,29 +193,33 @@
         gridArrayTile.addEventListener("mousedown", function (e) {
             e.preventDefault();
 
-            if ((gridArrayNode.type == "tile") && !moveStart && !moveTarget) {
-                blockPaint = true;
-                gridArrayNode.setType("block");
-            }
+            if (!interactionsJS.simulationRunning) {
+                if ((gridArrayNode.type == "tile") && !moveStart && !moveTarget) {
+                    blockPaint = true;
+                    gridArrayNode.setType("block");
+                }
 
-            else if ((gridArrayNode.type == "block") && !moveStart && !moveTarget) {
-                tilePaint = true;
-                gridArrayNode.setType("tile");
+                else if ((gridArrayNode.type == "block") && !moveStart && !moveTarget) {
+                    tilePaint = true;
+                    gridArrayNode.setType("tile");
+                }
             }
         });
 
         gridArrayTile.addEventListener("mouseover", function (e) {
             e.preventDefault();
 
-            if (blockPaint) {
-                if (gridArrayNode.type == "tile") {
-                    gridArrayNode.setType("block");
+            if (!interactionsJS.simulationRunning) {
+                if (blockPaint) {
+                    if (gridArrayNode.type == "tile") {
+                        gridArrayNode.setType("block");
+                    }
                 }
-            }
 
-            else if (tilePaint) {
-                if (gridArrayNode.type == "block") {
-                    gridArrayNode.setType("tile");
+                else if (tilePaint) {
+                    if (gridArrayNode.type == "block") {
+                        gridArrayNode.setType("tile");
+                    }
                 }
             }
         });
@@ -222,22 +236,26 @@
             }
 
             if (gridArrayNode.type == "start") {
-                if (moveStart) {
-                    moveStart = false;
-                    global.updateJS.selectedDisabled(currStart);
-                } else {
-                    moveStart = true;
-                    global.updateJS.selectedEnabled(currStart);
+                if (!interactionsJS.pathfinderRunning && !interactionsJS.simulationRunning) {
+                    if (moveStart) {
+                        moveStart = false;
+                        global.updateJS.selectedDisabled(currStart);
+                    } else {
+                        moveStart = true;
+                        global.updateJS.selectedEnabled(currStart);
+                    }
                 }
             }
 
             else if (gridArrayNode.type == "target") {
-                if (moveTarget) {
-                    moveTarget = false;
-                    global.updateJS.selectedDisabled(currTarget);
-                } else {
-                    moveTarget = true;
-                    global.updateJS.selectedEnabled(currTarget);
+                if (!interactionsJS.pathfinderRunning && !interactionsJS.simulationRunning) {
+                    if (moveTarget) {
+                        moveTarget = false;
+                        global.updateJS.selectedDisabled(currTarget);
+                    } else {
+                        moveTarget = true;
+                        global.updateJS.selectedEnabled(currTarget);
+                    }
                 }
             }
 
