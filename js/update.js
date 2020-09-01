@@ -83,18 +83,22 @@
         return nodeToTile(gridArrayNode);
     }
 
-    function reconstructDrawUpdate(gridArrayNode) {
+    function reconstructDrawUpdate(gridArrayNode, insert) {
         let gridArrayTile = nodeToTile(gridArrayNode);
 
-        disableAllStates(gridArrayTile);
-
-        if (!gridArrayTile.classList.contains("reconstruct")) {
-            gridArrayTile.classList.toggle("reconstruct");
+        if (insert) {
+            if (!gridArrayTile.classList.contains("reconstruct")) {
+                gridArrayTile.classList.toggle("reconstruct");
+            }
+        } else {
+            if (gridArrayTile.classList.contains("reconstruct")) {
+                gridArrayTile.classList.toggle("reconstruct");
+            }
         }
     }
 
-    updateJS.reconstructDrawUpdate = function (gridArrayNode) {
-        reconstructDrawUpdate(gridArrayNode);
+    updateJS.reconstructDrawUpdate = function (gridArrayNode, insert) {
+        reconstructDrawUpdate(gridArrayNode, insert);
     }
 
     function pathLengthUpdate(length) {
@@ -344,8 +348,8 @@
     }
 
     function keyDrawUpdate(gridArrayNode) {
-        let gridArrayNodeKey0 = Math.trunc(gridArrayNode.key[0]);
-        let gridArrayNodeKey1 = Math.trunc(gridArrayNode.key[1]);
+        let gridArrayNodeKey0 = Math.trunc(gridArrayNode.rhsValue);
+        let gridArrayNodeKey1 = Math.trunc(gridArrayNode.gValue);
 
         let gridArrayTile = nodeToTile(gridArrayNode);
 

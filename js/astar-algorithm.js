@@ -9,7 +9,7 @@
         let openSet;
 
         function aStarPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {
-            global.interactionsJS.simulationRunning = true;
+            global.interactionsJS.setSRunning(true);
 
             openSet = new Array();
 
@@ -238,7 +238,7 @@
             function reconstructUpdate() {
                 if (currentNode.inClosedSet && !currentNode.inOpenSet) {
                     totalPath.unshift(currentNode);
-                    global.updateJS.reconstructDrawUpdate(currentNode);
+                    global.updateJS.reconstructDrawUpdate(currentNode, true);
                 }
             }
 
@@ -258,7 +258,7 @@
             //     }
             // }
 
-            global.interactionsJS.simulationRunning = false;
+            global.interactionsJS.setSRunning(false);
 
             return totalPath;
         }
@@ -275,9 +275,8 @@
             console.log(explanation);
             global.updateJS.pathLengthUpdate(explanation);
             global.updateJS.pathBlockLengthUpdate(explanation);
-            global.interactionsJS.setNodesAnalyzed(explanation);
 
-            global.interactionsJS.simulationRunning = false;
+            global.interactionsJS.setSRunning(false);
         }
 
         astarAlgorithmJS.aStarPathfinding = function (startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {

@@ -3,6 +3,15 @@
     global.interactionsJS = interactionsJS;
 
     interactionsJS.simulationRunning = false;
+    interactionsJS.setSRunning = function (newValue) {
+        interactionsJS.simulationRunning = newValue;
+
+        if (newValue) {
+            global.updateJS.pathLengthUpdate("simulation in progress");
+            global.updateJS.pathBlockLengthUpdate("simulation in progress");
+        }
+    };
+    interactionsJS.setSRunning(false);
 
     interactionsJS.pathfinderRunning = false;
     interactionsJS.setPFRunning = function (newValue) {
@@ -31,6 +40,8 @@
 
     interactionsJS.pfType = "";
 
+    let changesArr = [];
+
     window.addEventListener("DOMContentLoaded", function () {
         let gridArray = global.pathfindingJS.gridArray;
         let rowDimension = global.gridSetupJS.rowDimension;
@@ -39,9 +50,25 @@
         currStart = gridArray[0][0];
         currTarget = gridArray[rowDimension - 1][colDimension - 1];
 
+        function preSimGARead() {
+            changesArr = [];
+
+            for (let row = 0; row < rowDimension; row++) {
+                for (let col = 0; col < colDimension; col++) {
+                    if (gridArray[row][col].recordedType != gridArray[row][col].type) {
+                        changesArr.push(gridArray[row][col]);
+                    }
+
+                    gridArray[row][col].recordedType = gridArray[row][col].type;
+                }
+            }
+
+            console.log(changesArr);
+        }
+
         document.querySelector("#clear-paths-btn").addEventListener("click", function () {
             global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
-            interactionsJS.simulationRunning = false;
+            interactionsJS.setSRunning(false);
             interactionsJS.setPFRunning(false);
         });
 
@@ -59,8 +86,38 @@
         });
 
         document.querySelector("#update-path-btn").addEventListener("click", function () {
+            //update path btn not working...still under development
             if (!interactionsJS.simulationRunning && interactionsJS.pathfinderRunning) {
-                console.log(interactionsJS.pfType);
+
+                preSimGARead();
+
+                if (changesArr.length != 0) {
+                    if (interactionsJS.totalPath) {
+                        global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
+                    }
+
+                    for (let i = 0; interactionsJS.totalPath && (i < interactionsJS.totalPath.length); i++) {
+                        global.updateJS.reconstructDrawUpdate(interactionsJS.totalPath[i], false);
+                    }
+
+                    interactionsJS.totalPath = null;
+                    interactionsJS.travelIndex = 0;
+
+                    if (interactionsJS.pfType == "aStar") {
+                        global.updateJS.clear(gridArray, rowDimension, colDimension, true, false);
+
+                        global.astarAlgorithmJS.aStarPathfinding(currStart,
+                            currTarget,
+                            interactionsJS.pfSettings.userSettings.heuristicFunc,
+                            interactionsJS.pfSettings.userSettings.movementType,
+                            interactionsJS.pfSettings.userSettings.cutCorners,
+                            interactionsJS.pfSettings.userSettings.speed);
+                    }
+
+                    // else if (interactionsJS.pfType == "lpa") {
+                    //     global.lpaAlgorithmJS.updateChanges(changesArr);
+                    // }
+                }
             }
         });
 
@@ -133,6 +190,11 @@
                     global.updateJS.toggleTravelerDrawUpdate(interactionsJS.totalPath[interactionsJS.travelIndex]);
                 }
 
+                interactionsJS.totalPath = null;
+                interactionsJS.travelIndex = 0;
+
+                interactionsJS.setNodesAnalyzed(0);
+
                 if (moveStart) {
                     moveStart = false;
                     global.updateJS.selectedDisabled(currStart);
@@ -143,17 +205,11 @@
                     global.updateJS.selectedDisabled(currTarget);
                 }
 
-                interactionsJS.totalPath = null;
-                interactionsJS.travelIndex = 0;
-
-                interactionsJS.setNodesAnalyzed(0);
-
-                global.updateJS.pathLengthUpdate("simulation in progress");
-                global.updateJS.pathBlockLengthUpdate("simulation in progress");
-
                 interactionsJS.pfType = pfSettings.userSettings.algorithm;
 
                 interactionsJS.setPFRunning(true);
+
+                preSimGARead();
 
                 if (pfSettings.userSettings.algorithm == "aStar") {
                     global.astarAlgorithmJS.aStarPathfinding(currStart,
@@ -296,4 +352,5 @@
     interactionsJS.installEventListeners = function (gridArrayNode) {
         installEventListeners(gridArrayNode);
     };
+
 })(window);

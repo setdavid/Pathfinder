@@ -132,7 +132,7 @@ form>div>button {
     background-color: #00FF11;
 }
 
-.reconstruct {
+div.reconstruct {
     background-color: purple;
 }
 
@@ -161,7 +161,7 @@ form>div>button {
 .tile {}
 
 .block {
-    background-color: black;
+    background-color: black !important;
 }
 
 /********** Media Queries **********/

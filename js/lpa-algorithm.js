@@ -69,7 +69,7 @@
         };
 
         function lpaPathfinding(startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {
-            global.interactionsJS.simulationRunning = true;
+            global.interactionsJS.setSRunning(true);
 
             pQ.array = new Array();
             pQ.lowestKeyIndex = 0;
@@ -100,6 +100,8 @@
                     }
 
                     node.rhsValue = Math.min.apply(null, predRhsArray);
+
+                    // global.updateJS.keyDrawUpdate(node);
                 }
 
                 if (node.inPQ) {
@@ -124,8 +126,11 @@
 
                     currentNode.setLocalCon();
 
+                    // global.updateJS.keyDrawUpdate(currentNode);
+
                     for (let i = 0; i < currentNode.succ.length; i++) {
                         updateVertex(currentNode.succ[i]);
+                        // updateSuccessors(currentNode.succ[i]);
                     }
                 } else {
                     currentNode.gValue = Infinity;
@@ -319,14 +324,31 @@
                     } else {
                         if (!currentNode.inPQ) {
                             totalPath.unshift(currentNode);
-                            global.updateJS.reconstructDrawUpdate(currentNode);
+                            global.updateJS.reconstructDrawUpdate(currentNode, true);
                         }
                     }
                 }
 
-                global.interactionsJS.simulationRunning = false;
+                global.interactionsJS.setSRunning(false);
 
                 return totalPath;
+            }
+
+            function updateChanges(changesArr) {
+                for (let i = 0; i < changesArr.length; i++) {
+                    for (let j = 0; j < changesArr[i].succ.length; j++) {
+                        if ((changesArr[i].succ[j].type != "block") &&
+                            (moveRestrictions(changesArr[i].succ[j].row, changesArr[i].succ[j].col, changesArr[i]))) {
+                            updateVertex(changesArr[i].succ[j]);
+                        }
+                    }
+                }
+
+                computeShortestPath();
+            }
+
+            lpaAlgorithmJS.updateChanges = function (changesArr) {
+                updateChanges(changesArr);
             }
         }
 
@@ -380,9 +402,8 @@
             console.log(explanation);
             global.updateJS.pathLengthUpdate(explanation);
             global.updateJS.pathBlockLengthUpdate(explanation);
-            global.interactionsJS.setNodesAnalyzed(explanation);
 
-            global.interactionsJS.simulationRunning = false;
+            global.interactionsJS.setSRunning(false);
         }
 
         lpaAlgorithmJS.lpaPathfinding = function (startNode, targetNode, heuristicFunc, movementType, cutCorners, timeout) {

@@ -44,6 +44,7 @@
                             global.updateJS.targetDrawUpdate(gridArray[row][col]);
                         }
                     },
+                    recordedType: null,
                     row: row,
                     col: col,
                     clearPaths: function () {
