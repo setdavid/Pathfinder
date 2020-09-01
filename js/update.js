@@ -148,6 +148,10 @@
             gridArrayTile.classList.toggle("tile");
         }
 
+        if (gridArrayTile.classList.contains("block")) {
+            gridArrayTile.classList.toggle("block");
+        }
+
         if (!gridArrayTile.classList.contains("start")) {
             gridArrayTile.classList.toggle("start");
         }
@@ -198,6 +202,10 @@
 
         if (gridArrayTile.classList.contains("tile")) {
             gridArrayTile.classList.toggle("tile");
+        }
+
+        if (gridArrayTile.classList.contains("block")) {
+            gridArrayTile.classList.toggle("block");
         }
 
         if (!gridArrayTile.classList.contains("target")) {

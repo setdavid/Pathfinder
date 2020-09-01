@@ -8,8 +8,8 @@
         let gridCSSRule = null;
         let gridDivCSSRule = null;
 
-        let rowDimension = 6;
-        let colDimension = 6;
+        let rowDimension = 30;
+        let colDimension = 30;
         gridSetupJS.rowDimension = rowDimension;
         gridSetupJS.colDimension = colDimension;
 

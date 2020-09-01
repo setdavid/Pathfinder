@@ -16,7 +16,7 @@
             for (let col = 0; col < colDimension; col++) {
                 let selectedType = null;
                 let randomNum = Math.random();
-                if (randomNum < 0) {
+                if (randomNum < 0.3) {
                     selectedType = "block";
                 } else {
                     selectedType = "tile";
